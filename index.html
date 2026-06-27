@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purple Star | Discover Your Type</title>
+    <meta name="description" content="Discover your Purple Star personality type — a free reading based on Ziwei Dou Shu, the ancient Chinese star system. No sign-up, no jargon.">
+    <script src="https://cdn.jsdelivr.net/npm/iztro/dist/iztro.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --purple-deep: #150826;
+            --purple-dark: #1c0d33;
+            --purple-mid: #2d1b69;
+            --purple-light: #7d4ce8;
+            --purple-glow: #a76bd8;
+            --gold: #e0b450;
+            --gold-light: #f4dc9a;
+            --gold-dark: #b8860b;
+            --text-primary: #f3ecff;
+            --text-secondary: #d6c8ee;
+            --text-muted: #9a89bd;
+            --bg-card: rgba(45, 27, 105, 0.45);
+            --bg-card-solid: #221140;
+            --border: rgba(224, 180, 80, 0.28);
+            --border-soft: rgba(167, 107, 216, 0.22);
+            --radius: 14px;
+            --radius-lg: 22px;
+            --shadow: 0 12px 40px rgba(0,0,0,0.45);
+            --shadow-gold: 0 0 26px rgba(224, 180, 80, 0.28);
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--purple-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.65;
+            overflow-x: hidden;
+        }
+        .bg-pattern {
+            position: fixed; inset: 0; z-index: -1;
+            background:
+                radial-gradient(ellipse at 18% 30%, rgba(125,76,232,0.18) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(224,180,80,0.10) 0%, transparent 50%),
+                radial-gradient(ellipse at 55% 90%, rgba(167,107,216,0.12) 0%, transparent 55%);
+        }
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-soft);
+            backdrop-filter: blur(20px); background: rgba(21,8,38,0.8);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { display: flex; align-items: center; gap: 0.7rem; cursor: pointer; }
+        .logo-icon {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--gold), var(--purple-light));
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+        }
+        .logo-text { font-size: 1.2rem; font-weight: 700; color: var(--gold-light); letter-spacing: 0.3px; }
+        .logo-sub { font-size: 0.62rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+        .nav-links { display: flex; gap: 1.4rem; list-style: none; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.88rem; cursor: pointer; transition: color 0.25s; }
+        .nav-links a:hover { color: var(--gold-light); }
+
+        .hero { text-align: center; padding: 3.5rem 1.5rem 2rem; max-width: 720px; margin: 0 auto; }
+        .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.18; }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 540px; margin: 0 auto; }
+        .hero .sub-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
+
+        .form-section { max-width: 540px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem; }
+        .form-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 1.75rem; backdrop-filter: blur(12px); box-shadow: var(--shadow);
+        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-group label { font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; }
+        .form-group input, .form-group select {
+            background: rgba(21,8,38,0.85); border: 1px solid var(--border-soft); border-radius: var(--radius);
+            padding: 0.7rem 0.9rem; color: var(--text-primary); font-size: 0.98rem;
+            transition: border-color 0.25s, box-shadow 0.25s; outline: none;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--gold); box-shadow: 0 0 0 3px rgba(224,180,80,0.14);
+        }
+        .form-group select option { background: var(--purple-dark); color: var(--text-primary); }
+        .btn-generate {
+            grid-column: 1 / -1; margin-top: 0.6rem; padding: 0.95rem 2rem;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--purple-deep); border: none; border-radius: var(--radius);
+            font-size: 1.05rem; font-weight: 700; cursor: pointer; letter-spacing: 0.4px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+        .btn-generate:active { transform: translateY(0); }
+
+        .loading-overlay {
+            display: none; position: fixed; inset: 0; z-index: 200;
+            background: rgba(21,8,38,0.92); justify-content: center; align-items: center; flex-direction: column; gap: 1.4rem;
+        }
+        .loading-overlay.active { display: flex; }
+        .loading-spinner {
+            width: 56px; height: 56px; border: 3px solid var(--border-soft);
+            border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: var(--text-secondary); font-size: 0.98rem; }
+
+        /* ===== Results ===== */
+        .results { display: none; max-width: 620px; margin: 0 auto; padding: 1rem 1.25rem 2rem; }
+        .results.active { display: block; animation: fadeUp 0.5s ease; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+        .res-hero {
+            background: var(--bg-card-solid); border: 1.5px solid var(--gold);
+            border-radius: var(--radius-lg); padding: 1.9rem 1.6rem; text-align: center;
+            box-shadow: var(--shadow-gold);
+        }
+        .res-eyebrow { font-size: 0.78rem; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .res-arch {
+            font-size: 2.05rem; font-weight: 800; line-height: 1.15;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .res-essence { font-size: 1.02rem; color: var(--text-secondary); margin-top: 0.7rem; line-height: 1.55; }
+        .res-tag {
+            display: inline-block; margin-top: 1rem; font-size: 0.8rem; color: var(--gold-light);
+            background: rgba(224,180,80,0.12); border: 1px solid var(--border); padding: 0.3rem 0.9rem; border-radius: 99px;
+        }
+        .time-caveat {
+            display: none; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.9rem;
+            background: rgba(167,107,216,0.1); border-radius: var(--radius); padding: 0.6rem 0.8rem; line-height: 1.5;
+        }
+
+        .res-card {
+            background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: var(--radius-lg);
+            padding: 1.5rem 1.4rem; margin-top: 1rem; backdrop-filter: blur(10px);
+        }
+        .res-card h3 { font-size: 0.82rem; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.85rem; }
+        .snapshot-text { font-size: 1.02rem; color: var(--text-primary); line-height: 1.7; }
+        .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .chip {
+            font-size: 0.85rem; color: var(--gold-light); background: rgba(224,180,80,0.1);
+            border: 1px solid var(--border); padding: 0.35rem 0.85rem; border-radius: 99px;
+        }
+
+        .sw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+        .sw-col h4 { font-size: 0.9rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem; }
+        .sw-col.good h4 { color: var(--gold-light); }
+        .sw-col.edge h4 { color: var(--purple-glow); }
+        .sw-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .sw-col li { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; padding-left: 1rem; position: relative; }
+        .sw-col li::before { content: '\00b7'; position: absolute; left: 0.2rem; color: var(--gold); font-weight: 700; }
+
+        /* Accordion */
+        .acc-item { border-bottom: 1px solid var(--border-soft); }
+        .acc-item:last-child { border-bottom: none; }
+        .acc-head {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 0; cursor: pointer; font-size: 1rem; font-weight: 600; color: var(--text-primary);
+        }
+        .acc-head:hover { color: var(--gold-light); }
+        .acc-head .acc-chev { color: var(--gold); transition: transform 0.25s; font-size: 1.1rem; }
+        .acc-body { display: none; padding: 0 0 1.1rem; font-size: 0.98rem; color: var(--text-secondary); line-height: 1.72; }
+
+        .share-row { margin-top: 1.25rem; }
+        .btn-share {
+            width: 100%; padding: 0.9rem; border-radius: var(--radius);
+            background: linear-gradient(135deg, var(--purple-light), var(--purple-mid));
+            color: #fff; border: 1px solid rgba(125,76,232,0.5); font-size: 1rem; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .btn-share:hover { box-shadow: 0 6px 20px rgba(125,76,232,0.45); transform: translateY(-1px); }
+
+        /* ===== 12 Palace Overview (Tier 1 & Tier 2) ===== */
+        .palace-overview { margin-top: 1rem; }
+        .palace-overview .section-title { font-size: 0.82rem; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.85rem; }
+        .palace-acc-item {
+            border-bottom: 1px solid var(--border-soft);
+            transition: background 0.2s;
+        }
+        .palace-acc-item:last-child { border-bottom: none; }
+        .palace-acc-head {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.85rem 0.9rem; cursor: pointer; border-radius: var(--radius);
+            transition: background 0.2s;
+        }
+        .palace-acc-head:hover { background: rgba(125,76,232,0.08); }
+        .palace-acc-left { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
+        .palace-acc-icon {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; flex-shrink: 0;
+            background: rgba(224,180,80,0.12); border: 1px solid var(--border);
+            color: var(--gold-light);
+        }
+        .palace-acc-label { min-width: 0; }
+        .palace-acc-name { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); }
+        .palace-acc-oneliner { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px; }
+        .palace-acc-right { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+        .palace-acc-chev { color: var(--gold); font-size: 1rem; transition: transform 0.25s; }
+        .palace-acc-body { display: none; padding: 0 0.9rem 1rem; }
+        .palace-acc-body.open { display: block; }
+        .palace-detail-text { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; }
+        .palace-star-tag { font-size: 0.82rem; color: var(--gold-light); font-weight: 600; }
+        .btn-read-more {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            margin-top: 0.7rem; padding: 0.4rem 0.9rem; border-radius: 99px;
+            background: rgba(125,76,232,0.15); border: 1px solid rgba(125,76,232,0.35);
+            color: var(--purple-glow); font-size: 0.82rem; font-weight: 600; cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .btn-read-more:hover { background: rgba(125,76,232,0.25); box-shadow: 0 0 12px rgba(125,76,232,0.2); }
+        .tier2-full { display: none; margin-top: 0.7rem; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.72; }
+        .tier2-full.open { display: block; animation: fadeUp 0.3s ease; }
+        .palace-no-star { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+
+        /* ===== AI Deep Reading (Tier 3) ===== */
+        .ai-section { margin-top: 1rem; }
+        .ai-card {
+            background: var(--bg-card-solid); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 1.4rem;
+            overflow: hidden;
+        }
+        .ai-card h3 { font-size: 0.82rem; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.6rem; }
+        .ai-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 1rem; }
+        .ai-api-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+        .ai-api-group label { font-size: 0.78rem; color: var(--text-muted); }
+        .ai-api-input {
+            width: 100%; padding: 0.65rem 0.85rem; border-radius: var(--radius);
+            background: rgba(21,8,38,0.85); border: 1px solid var(--border-soft);
+            color: var(--text-primary); font-size: 0.92rem; outline: none;
+            transition: border-color 0.25s;
+        }
+        .ai-api-input:focus { border-color: var(--gold); }
+        .ai-disclaimer { font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; padding: 0.5rem; background: rgba(167,107,216,0.08); border-radius: var(--radius); }
+        .btn-ai-generate {
+            width: 100%; padding: 0.85rem; border-radius: var(--radius);
+            background: linear-gradient(135deg, var(--purple-mid), var(--purple-light));
+            color: #fff; border: 1px solid rgba(125,76,232,0.5);
+            font-size: 0.95rem; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .btn-ai-generate:hover { box-shadow: 0 6px 20px rgba(125,76,232,0.4); transform: translateY(-1px); }
+        .btn-ai-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .ai-results { margin-top: 1rem; display: none; }
+        .ai-results.active { display: block; }
+        .ai-palace-block { border-bottom: 1px solid var(--border-soft); }
+        .ai-palace-block:last-child { border-bottom: none; }
+        .ai-palace-head {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.8rem 0; cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text-primary);
+        }
+        .ai-palace-head:hover { color: var(--gold-light); }
+        .ai-palace-head .acc-chev { color: var(--gold); transition: transform 0.25s; font-size: 1rem; }
+        .ai-palace-body { display: none; padding: 0 0 1rem; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.72; }
+        .ai-palace-body.open { display: block; animation: fadeUp 0.3s ease; }
+        .ai-palace-body p { margin-bottom: 0.6rem; }
+        .ai-typing-cursor { display: inline-block; width: 2px; height: 1em; background: var(--gold); animation: blink 0.8s infinite; vertical-align: text-bottom; margin-left: 2px; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .ai-loading-bar { width: 100%; height: 3px; background: var(--border-soft); border-radius: 2px; margin-top: 1rem; overflow: hidden; display: none; }
+        .ai-loading-bar.active { display: block; }
+        .ai-loading-bar-inner { height: 100%; width: 30%; background: linear-gradient(90deg, var(--purple-light), var(--gold)); border-radius: 2px; animation: aiLoading 1.5s ease-in-out infinite; }
+        @keyframes aiLoading { 0%{transform:translateX(-100%)} 100%{transform:translateX(400%)} }
+
+        /* Advanced (collapsed chart) */
+        .advanced { margin-top: 1.25rem; border: 1px dashed var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+        .adv-head {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 1.3rem; cursor: pointer; background: rgba(45,27,105,0.25);
+        }
+        .adv-head:hover { background: rgba(45,27,105,0.4); }
+        .adv-title { font-size: 0.95rem; color: var(--text-secondary); }
+        .adv-title .adv-chev { color: var(--gold); margin-right: 0.5rem; display: inline-block; transition: transform 0.25s; }
+        .adv-hint { font-size: 0.75rem; color: var(--text-muted); }
+        .adv-body { display: none; padding: 1.3rem; }
+        .adv-body.open { display: block; }
+        #chart-svg { width: 100%; max-width: 560px; height: auto; margin: 0 auto 1.2rem; display: block; }
+        .chart-note { text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1.2rem; }
+        .info-block h4 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin: 1.2rem 0 0.7rem; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+        .info-item { display: flex; flex-direction: column; gap: 0.15rem; }
+        .info-item .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-item .value { font-size: 0.92rem; color: var(--text-primary); font-weight: 600; }
+        .star-list { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+        .star-tag {
+            display: inline-flex; align-items: center; padding: 0.28rem 0.65rem; border-radius: 99px; font-size: 0.78rem; font-weight: 500;
+        }
+        .star-tag.major { background: rgba(244,220,154,0.14); color: var(--gold-light); border: 1px solid rgba(244,220,154,0.3); }
+        .star-tag.minor { background: rgba(167,139,250,0.14); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.3); }
+        .star-tag.tough { background: rgba(251,146,60,0.14); color: #fdba74; border: 1px solid rgba(251,146,60,0.3); }
+
+        /* Palace detail modal */
+        .palace-detail { display: none; position: fixed; inset: 0; background: rgba(21,8,38,0.95); z-index: 300; justify-content: center; align-items: center; padding: 1.5rem; }
+        .palace-detail.active { display: flex; }
+        .palace-detail-content { background: var(--bg-card-solid); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.8rem; max-width: 460px; width: 100%; max-height: 82vh; overflow-y: auto; }
+        .palace-detail-content h3 { color: var(--gold-light); margin-bottom: 0.8rem; font-size: 1.25rem; }
+        .palace-detail-close { float: right; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; line-height: 1; }
+        .palace-detail-close:hover { color: var(--text-primary); }
+        .palace-cell { cursor: pointer; transition: opacity 0.2s; }
+        .palace-cell:hover rect { stroke: var(--gold); stroke-width: 2; }
+        .chart-palace-name { font-size: 11px; fill: #e0b450; font-weight: 600; }
+        .chart-palace-sub { font-size: 8px; fill: #9a89bd; }
+        .chart-star-major { font-size: 10px; fill: #f4dc9a; font-weight: 600; }
+        .chart-star-minor { font-size: 8px; fill: #c4b5fd; }
+        .chart-star-tough { font-size: 8px; fill: #fdba74; }
+        .chart-stem { font-size: 9px; fill: #9a89bd; }
+        .chart-body-marker { font-size: 7px; fill: #a76bd8; }
+        .chart-center-text { font-size: 10px; fill: #d6c8ee; }
+        .chart-center-title { font-size: 12px; fill: #e0b450; font-weight: 600; }
+
+        /* About / Star guide */
+        .about { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem; display: none; }
+        .about.active { display: block; }
+        .about h2 { color: var(--gold-light); font-size: 1.7rem; margin-bottom: 1rem; text-align: center; }
+        .about > p { color: var(--text-secondary); margin-bottom: 1rem; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.9rem; margin-top: 1.8rem; }
+        .legend-item { background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 1rem; transition: border-color 0.25s; }
+        .legend-item:hover { border-color: var(--gold); }
+        .legend-name { color: var(--gold-light); font-weight: 700; font-size: 1rem; }
+        .legend-sub { color: var(--text-muted); font-size: 0.76rem; margin-top: 0.1rem; }
+        .legend-desc { color: var(--text-secondary); font-size: 0.86rem; margin-top: 0.4rem; line-height: 1.5; }
+
+        footer { text-align: center; padding: 2rem 1.5rem; color: var(--text-muted); font-size: 0.78rem; border-top: 1px solid var(--border-soft); margin-top: 2.5rem; }
+        .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--bg-card-solid); border: 1px solid var(--gold); border-radius: var(--radius); padding: 0.8rem 1.3rem; color: var(--gold-light); font-size: 0.88rem; z-index: 400; display: none; }
+        .toast.active { display: block; }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.9rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .res-arch { font-size: 1.7rem; }
+            .sw-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .info-grid { grid-template-columns: 1fr; }
+            .palace-acc-oneliner { max-width: 180px; }
+            .ai-card { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <nav>
+        <div class="logo" onclick="showPage('home')">
+            <div class="logo-icon">&#9733;</div>
+            <div>
+                <div class="logo-text">Purple Star</div>
+                <div class="logo-sub">Ziwei Dou Shu</div>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a onclick="showPage('home')">Find your type</a></li>
+            <li><a onclick="showPage('about')">The 14 types</a></li>
+        </ul>
+    </nav>
+
+    <div id="page-home">
+        <section class="hero">
+            <h1>Discover Your <span class="highlight">Purple Star Type</span></h1>
+            <p>An ancient Chinese personality system dating back over a thousand years. Based on your birth date and time, it maps the positions of celestial stars across twelve life palaces to reveal your innate destiny and character.</p>
+            <p class="sub-note">Free &middot; No sign-up &middot; Takes 20 seconds</p>
+        </section>
+
+        <section class="form-section">
+            <div class="form-card">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Birth year</label>
+                        <input type="number" id="birth-year" min="1900" max="2100" placeholder="e.g. 1990">
+                    </div>
+                    <div class="form-group">
+                        <label>Birth month</label>
+                        <select id="birth-month">
+                            <option value="">Month</option>
+                            <option value="1">January</option><option value="2">February</option>
+                            <option value="3">March</option><option value="4">April</option>
+                            <option value="5">May</option><option value="6">June</option>
+                            <option value="7">July</option><option value="8">August</option>
+                            <option value="9">September</option><option value="10">October</option>
+                            <option value="11">November</option><option value="12">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Birth day</label>
+                        <input type="number" id="birth-day" min="1" max="31" placeholder="e.g. 15">
+                    </div>
+                    <div class="form-group">
+                        <label>Birth time</label>
+                        <select id="birth-hour">
+                            <option value="">Time</option>
+                            <option value="0">12 AM (midnight)</option>
+                            <option value="1">1 AM</option><option value="2">2 AM</option>
+                            <option value="3">3 AM</option><option value="4">4 AM</option>
+                            <option value="5">5 AM</option><option value="6">6 AM</option>
+                            <option value="7">7 AM</option><option value="8">8 AM</option>
+                            <option value="9">9 AM</option><option value="10">10 AM</option>
+                            <option value="11">11 AM</option><option value="12">12 PM (noon)</option>
+                            <option value="13">1 PM</option><option value="14">2 PM</option>
+                            <option value="15">3 PM</option><option value="16">4 PM</option>
+                            <option value="17">5 PM</option><option value="18">6 PM</option>
+                            <option value="19">7 PM</option><option value="20">8 PM</option>
+                            <option value="21">9 PM</option><option value="22">10 PM</option>
+                            <option value="23">11 PM</option>
+                            <option value="unknown">I don't know my birth time</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="">Select</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Calendar</label>
+                        <select id="calendar-type">
+                            <option value="solar">Standard (Gregorian)</option>
+                            <option value="lunar">Chinese lunar</option>
+                        </select>
+                    </div>
+                    <button class="btn-generate" onclick="generateChart()">&#9733; Reveal my type</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="results" id="results">
+            <!-- Archetype Hero Card -->
+            <div class="res-hero">
+                <div class="res-eyebrow">Your Purple Star type</div>
+                <div class="res-arch" id="arch-name">&mdash;</div>
+                <div class="res-essence" id="arch-essence"></div>
+                <div class="res-tag" id="arch-tag"></div>
+                <div class="time-caveat" id="time-caveat"></div>
+            </div>
+
+            <!-- Snapshot -->
+            <div class="res-card">
+                <h3>Your snapshot</h3>
+                <div class="snapshot-text" id="snapshot-text"></div>
+                <div class="chips" id="snapshot-chips"></div>
+            </div>
+
+            <!-- Strengths & Watch-outs -->
+            <div class="res-card">
+                <h3>Strengths &amp; watch-outs</h3>
+                <div class="sw-grid">
+                    <div class="sw-col good">
+                        <h4>&#9733; Strengths</h4>
+                        <ul id="strengths-list"></ul>
+                    </div>
+                    <div class="sw-col edge">
+                        <h4>&#9788; Watch-outs</h4>
+                        <ul id="watchouts-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deeper Reading (4 accordion items) -->
+            <div class="res-card">
+                <h3>Go deeper</h3>
+                <div class="acc-item">
+                    <div class="acc-head" onclick="toggleAcc('acc-personality', this)">Personality in depth <span class="acc-chev">&#9662;</span></div>
+                    <div class="acc-body" id="acc-personality"></div>
+                </div>
+                <div class="acc-item">
+                    <div class="acc-head" onclick="toggleAcc('acc-career', this)">Career &amp; calling <span class="acc-chev">&#9662;</span></div>
+                    <div class="acc-body" id="acc-career"></div>
+                </div>
+                <div class="acc-item">
+                    <div class="acc-head" onclick="toggleAcc('acc-love', this)">Love &amp; relationships <span class="acc-chev">&#9662;</span></div>
+                    <div class="acc-body" id="acc-love"></div>
+                </div>
+                <div class="acc-item">
+                    <div class="acc-head" onclick="toggleAcc('acc-money', this)">Wealth &amp; money <span class="acc-chev">&#9662;</span></div>
+                    <div class="acc-body" id="acc-money"></div>
+                </div>
+            </div>
+
+            <!-- ===== TIER 1 & TIER 2: 12 Palace Overview ===== -->
+            <div class="palace-overview res-card" id="palace-overview">
+                <h3>Your 12 Palaces at a Glance</h3>
+                <div id="palace-accordion-list"></div>
+            </div>
+
+            <!-- ===== TIER 3: AI Deep Reading ===== -->
+            <div class="ai-section res-card" id="ai-section">
+                <div class="ai-card">
+                    <h3>&#10024; AI Deep Reading</h3>
+                    <p class="ai-desc">Generate a personalized interpretation for all 12 palaces powered by AI. Your chart data is sent directly to OpenAI from your browser &mdash; nothing passes through our servers.</p>
+                    <div class="ai-api-group">
+                        <label>OpenAI API Key</label>
+                        <input type="password" class="ai-api-input" id="ai-api-key" placeholder="sk-..." autocomplete="off">
+                    </div>
+                    <div class="ai-disclaimer">
+                        &#128274; Your API key is stored only in your browser session and sent directly to OpenAI. It is never transmitted to any other server. You can clear it by refreshing the page.
+                    </div>
+                    <button class="btn-ai-generate" id="btn-ai-generate" onclick="generateAIReading()">
+                        &#10024; Generate AI reading for all 12 palaces
+                    </button>
+                    <div class="ai-loading-bar" id="ai-loading-bar"><div class="ai-loading-bar-inner"></div></div>
+                    <div class="ai-results" id="ai-results"></div>
+                </div>
+            </div>
+
+            <!-- Share -->
+            <div class="share-row">
+                <button class="btn-share" onclick="shareType()">&#10024; Share my type</button>
+            </div>
+
+            <!-- Advanced Chart -->
+            <div class="advanced">
+                <div class="adv-head" onclick="toggleAdvanced(this)">
+                    <span class="adv-title"><span class="adv-chev">&#9656;</span>See the star chart behind your reading</span>
+                    <span class="adv-hint">advanced</span>
+                </div>
+                <div class="adv-body" id="adv-body">
+                    <svg id="chart-svg" viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg"></svg>
+                    <p class="chart-note">This is your full 12-palace Ziwei chart. Tap any palace for details.</p>
+                    <div class="info-block">
+                        <h4>Chart basics</h4>
+                        <div class="info-grid" id="basic-info"></div>
+                        <h4>Major stars in your Life Palace</h4>
+                        <div class="star-list" id="life-palace-stars"></div>
+                        <h4>All 14 major stars</h4>
+                        <div class="star-list" id="all-major-stars"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="about" id="page-about">
+        <h2>The 14 Purple Star Types</h2>
+        <p>Ziwei Dou Shu centers on 14 major stars. The one sitting in your Life Palace becomes your core type &mdash; your personality, your talents, and your blind spots.</p>
+        <div class="legend" id="legend"></div>
+    </div>
+
+    <div class="loading-overlay" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loading-text">Reading your stars&hellip;</div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <div class="palace-detail" id="palace-detail">
+        <div class="palace-detail-content" id="palace-detail-content"></div>
+    </div>
+
+    <footer>
+        <p>Purple Star &copy; 2025 &middot; For self-reflection and entertainment. Not a substitute for professional advice.</p>
+    </footer>
+
+<script>
+// ====================================================================
+//  14 ARCHETYPE READINGS
+// ====================================================================
+const READINGS = {
+  '\u7d2b\u5fae': {
+    pinyin: 'Ziwei', name: 'The Imperial Sovereign',
+    essence: 'Born to preside \u2014 you need a domain of your own, and the respect to run it your way.',
+    chips: ['Natural authority', 'High standards', 'Big-picture'],
+    snapshot: "You carry an authority people tend to feel before you say much, and you hold yourself (and everyone around you) to a high standard. You'd rather own an outcome than follow someone else's plan \u2014 and the same pride that gives you dignity can quietly leave you a little isolated.",
+    strengths: ['A commanding, steady presence', 'Sees the whole board, not just the next move', 'People look to you to set the direction'],
+    watchouts: ['Can come across as aloof or hard to reach', 'Bristles at being told what to do', 'Depends on capable people to actually execute'],
+    personality: "At your core you want to matter and to be respected for it. You're dignified, composed under pressure, and uneasy in any role where you're not at least partly in charge. You think in terms of legacy and the long game, but you can stall on small decisions when you don't have trusted people around you to lean on.",
+    career: "You're built to lead, set vision, or own something rather than take orders inside someone else's machine. You do best with a kind of 'court' \u2014 capable specialists who handle execution while you steer. Watch a tendency to want the title and the respect before you've built the team that makes the role real.",
+    love: "You're loyal and protective, and you take the relationship seriously \u2014 but you want a partner who respects you, not one who manages or competes with you. Your guardedness can read as coldness; letting someone see the uncertainty behind the composure is where real closeness begins.",
+    money: "You think big and you're comfortable with ambition around wealth and status. You're rarely reckless, but you can overspend on things that signal standing. Your financial strength comes from surrounding yourself with people who handle the details you find tedious."
+  },
+  '\u5929\u5e9c': {
+    pinyin: 'Tianfu', name: 'The Imperial Keeper',
+    essence: 'A natural steward \u2014 you build security, hold it steady, and rarely let the ground move under you.',
+    chips: ['Steady & prudent', 'Resourceful', 'Security-minded'],
+    snapshot: "You're the calm, capable one who keeps things stable and makes resources stretch. You prefer to build slowly and safely rather than gamble, and people trust you to hold the center \u2014 though that same caution can keep you in comfortable situations long after it's time to move.",
+    strengths: ['Calm, grounding presence', 'Excellent with resources and logistics', 'People trust you to keep things running'],
+    watchouts: ['Can cling to comfort and avoid risk', 'Plays defense more than offense', 'Self-protective when you should open up'],
+    personality: "Security is your baseline need \u2014 emotional, financial, practical. You're measured, diplomatic, and good at managing whatever you're handed, but you'd rather conserve than gamble. Your steadiness is a real gift, but watch the version of it that becomes 'I'll stay where it's safe' even when you've outgrown the place.",
+    career: "You shine in roles that reward stewardship \u2014 operations, finance, managing assets, running an established thing well. You're the safe pair of hands, not usually the disruptor. Growth comes from occasionally backing yourself to take a calculated risk instead of only protecting what already exists.",
+    love: "You're a stable, providing partner who values loyalty and a settled home. You show love through reliability more than grand gestures. The edge to watch: staying in a 'fine' relationship out of comfort, or guarding your inner world so well that a partner can't fully reach it.",
+    money: "You're naturally good with money \u2014 saving, managing, accumulating. You rarely overspend and you build a cushion by instinct. Your blind spot is being so risk-averse you miss opportunities; some of your security would be safer if it were also growing."
+  },
+  '\u5929\u673a': {
+    pinyin: 'Tianji', name: 'The Wise Strategist',
+    essence: "A restless, brilliant mind \u2014 you're always three moves ahead, sometimes faster than you can act.",
+    chips: ['Quick & analytical', 'Adaptable', 'Idea machine'],
+    snapshot: "Your mind rarely switches off \u2014 you analyze, plan, connect dots, and see angles other people miss. You're flexible and full of ideas, but the same engine that makes you clever can spin into overthinking, second-guessing, and trouble committing to one path.",
+    strengths: ['Sharp, strategic thinking', 'Adapts fast to new situations', 'Spots patterns and solutions others miss'],
+    watchouts: ['Overthinks and second-guesses', 'Can be indecisive or scattered', 'Lives in your head more than your body'],
+    personality: "You're an ideas-and-strategy person, endlessly curious and mentally quick. You'd rather understand a system than just live inside it. The catch is that thinking can become a substitute for doing \u2014 and your plans and moods can shift as fast as your thoughts, which others find hard to track.",
+    career: "You're a natural strategist, analyst, planner, or advisor \u2014 anywhere insight matters more than brute execution. You thrive on variety and problem-solving and wilt in repetitive roles. Your growth edge is committing to a direction long enough to see it through instead of redesigning the plan every week.",
+    love: "You connect through the mind first \u2014 you want a partner you can think out loud with. You're attentive and considerate, but your restlessness and overanalysis can unsettle a relationship that's actually fine. Learning to rest in 'good' without dissecting it serves you here.",
+    money: "You're clever with money and good at spotting opportunities, but indecision and changing plans can work against you. You may research endlessly and then hesitate. A simple, automated, stick-to-it strategy beats your instinct to constantly re-optimize."
+  },
+  '\u592a\u9633': {
+    pinyin: 'Taiyang', name: 'The Radiant Leader',
+    essence: 'Warm, generous, and meant to shine \u2014 you give energy to everyone around you, sometimes faster than you replenish it.',
+    chips: ['Warm & generous', 'Charismatic', 'Driven to give'],
+    snapshot: "You're naturally warm, outgoing, and generous, with a pull toward roles where you can lead, uplift, or be in the spotlight. You give a lot \u2014 energy, help, attention \u2014 but you can over-give to the point of burnout, and you quietly want the recognition you don't always ask for.",
+    strengths: ['Radiant, motivating presence', 'Genuinely generous and fair', 'Natural at public-facing leadership'],
+    watchouts: ['Over-gives and burns out', 'Can quietly crave recognition', 'Blunt or impatient when stretched thin'],
+    personality: "You're built to be seen and to serve \u2014 there's a brightness to you that draws people in. You're idealistic, hardworking, and fair, with a strong instinct to do right by others. But you pour out energy faster than you take it back in, and you can resent giving so much when it goes unnoticed.",
+    career: "You belong in visible, people-facing, or leadership roles \u2014 teaching, public work, anything where your warmth and drive light up a room. You work hard and want your work to matter. The lesson is pacing: protecting your energy so your generosity is sustainable, not a slow burnout.",
+    love: "You love generously and openly, and you want a partner you can be proud of and devoted to. You give a lot. Watch the pattern of over-functioning for someone, then feeling unseen \u2014 and the bluntness that slips out when you're depleted.",
+    money: "You're generous with money, often to a fault \u2014 you give, lend, and treat people freely. You earn through effort and visibility. Your finances improve when you let yourself receive and keep as readily as you give."
+  },
+  '\u6b66\u66f2': {
+    pinyin: 'Wuqu', name: 'The Steadfast Guardian',
+    essence: "Decisive, disciplined, and all about results \u2014 you'd rather act than talk, and you get things done.",
+    chips: ['Decisive', 'Disciplined', 'Results-driven'],
+    snapshot: "You're direct, determined, and capable \u2014 when something needs doing, you do it without drama. You're strong with money and execution and you don't waste words. But your toughness can read as cold, and the softer, more emotional side of life is where you feel least at home.",
+    strengths: ['Gets things done, no excuses', 'Strong with money and discipline', 'Decisive under pressure'],
+    watchouts: ['Can be blunt or emotionally distant', 'Struggles to soften or open up', 'Risks becoming a lonely workaholic'],
+    personality: "You're an action-and-results person with a backbone of steel. You value competence, independence, and getting on with it, and you have little patience for fluff. The trade-off: feelings \u2014 yours and others' \u2014 can feel like foreign territory, and you can isolate behind your self-sufficiency.",
+    career: "You excel where execution, money, and decisiveness matter \u2014 finance, operations, engineering, building things, running things. You're the one who delivers. Growth comes from developing the people-and-emotion skills that turn a strong operator into a leader people want to follow.",
+    love: "You're loyal, dependable, and protective, but not naturally expressive \u2014 you show love by doing, not saying. A partner may need more warmth than comes easily to you. Letting yourself be soft and a little vulnerable is the work that keeps you from feeling alone in a relationship.",
+    money: "This is your home turf \u2014 you're disciplined, decisive, and capable of building real wealth. You manage money well and aren't easily swayed. Your only risk is treating money or work as a substitute for the emotional life you find harder to build."
+  },
+  '\u5929\u540c': {
+    pinyin: 'Tiantong', name: 'The Gentle Peacemaker',
+    essence: 'Kind, easygoing, and emotionally warm \u2014 you seek comfort and harmony and you put people at ease.',
+    chips: ['Kind & easygoing', 'Harmony-seeking', 'Optimistic'],
+    snapshot: "You're gentle, warm, and good at keeping the peace \u2014 people relax around you. You find joy in simple comforts and you'd rather smooth things over than fight. But your dislike of conflict and effort can tip into passivity, and you sometimes need a push to chase what you actually want.",
+    strengths: ['Warm, calming, easy to be around', 'Emotionally kind and accepting', 'Finds contentment and shares it'],
+    watchouts: ['Avoids conflict, even when it matters', 'Can drift into comfort and passivity', 'Needs an external push to get moving'],
+    personality: "You have a soft, optimistic, almost childlike openness and a real gift for contentment. You value comfort, harmony, and good feeling, and you don't naturally fight or force. The shadow side is inertia \u2014 staying comfortable instead of stretching, and avoiding the friction that growth sometimes requires.",
+    career: "You do well in supportive, creative, people-soothing, or lifestyle-oriented roles, anywhere a warm touch matters more than aggression. You're not built for cutthroat environments. Your growth edge is supplying your own drive and structure so your gentleness doesn't become drift.",
+    love: "You're a sweet, affectionate, easy partner who genuinely wants everyone happy. You nurture closeness well. The risk: avoiding hard conversations to keep the peace, which lets small problems quietly grow \u2014 and leaning on a partner to provide the momentum you'd rather not.",
+    money: "You're not especially driven by money and you like to enjoy life, which can mean spending on comfort and pleasure. You're rarely greedy, but you can be lax about planning. A little structure and a nudge toward saving go a long way for you."
+  },
+  '\u5ec9\u8d1e': {
+    pinyin: 'Lianzhen', name: 'The Enigmatic Charmer',
+    essence: "Complex, intense, and magnetic \u2014 you hold order and rebellion in the same hand, and people can't quite read you.",
+    chips: ['Intense & magnetic', 'Principled yet rebellious', 'Passionate'],
+    snapshot: "You're a study in contradictions \u2014 disciplined yet rebellious, principled yet drawn to the edge, controlled on the surface with deep currents underneath. You're charismatic and passionate, but your intensity can become obsessive or controlling, and your moods run deep.",
+    strengths: ['Magnetic, hard-to-ignore presence', 'Capable of real discipline and focus', 'Passionate and committed when invested'],
+    watchouts: ['Intensity tips into obsession or control', 'Moody and emotionally complex', 'Can swing between order and chaos'],
+    personality: "You're complex and layered \u2014 part rule-keeper, part rule-breaker \u2014 with a magnetism that pulls people in and a depth they don't always get to see. You feel things intensely and you don't do anything halfway. The work is channeling that intensity so it builds rather than consumes.",
+    career: "You do well where intensity, discipline, and a bit of edge combine \u2014 leadership, law, anything demanding focus and willpower, or creative-but-structured fields. You can grind hard toward a goal. Watch the controlling, all-or-nothing streak that can sabotage what you've built.",
+    love: "You love deeply and intensely, and you're magnetic to partners \u2014 but relationships with you run hot, and passion can curdle into possessiveness or drama. Growth lies in trusting enough to loosen your grip, and in letting a partner see the vulnerable layers under the control.",
+    money: "You can be disciplined and capable with money when focused, but your intensity can also drive impulsive or risky moves. You may swing between strict control and indulgence. Steadiness and self-awareness around your impulses are your financial allies."
+  },
+  '\u592a\u9634': {
+    pinyin: 'Taiyin', name: 'The Mystic Seer',
+    essence: 'Gentle, intuitive, and deep \u2014 you feel everything, notice everything, and keep most of it private.',
+    chips: ['Intuitive', 'Nurturing', 'Emotionally deep'],
+    snapshot: "You're sensitive, perceptive, and quietly nurturing, with a rich inner world you mostly keep to yourself. You pick up on moods and undercurrents others miss and you have real aesthetic and emotional intelligence. But your sensitivity can tip into moodiness, withdrawal, or absorbing feelings that aren't yours.",
+    strengths: ['Deep intuition and emotional insight', 'Nurturing and quietly caring', 'Refined aesthetic and imagination'],
+    watchouts: ['Sensitive to the point of moodiness', 'Withdraws and keeps too much inside', "Absorbs others' emotions as your own"],
+    personality: "You're a feeler and an observer with a gentle, private nature and a deep emotional and imaginative life. You nurture quietly and notice subtleties everyone else walks past. The shadow is over-sensitivity \u2014 retreating inward, taking things to heart, and dimming yourself to avoid being exposed.",
+    career: "You thrive in nurturing, creative, intuitive, or behind-the-scenes roles \u2014 caregiving, the arts, research, anything with depth and a humane pace. Harsh, aggressive environments drain you. Your growth edge is sharing your gifts visibly instead of hiding them, and guarding your energy from overwhelm.",
+    love: "You love tenderly and deeply, and you crave emotional safety and intimacy. You're attentive and caring, but you can withdraw or go quiet when hurt rather than say what you feel. Letting a partner into your inner world \u2014 and not taking everything so personally \u2014 is the work that deepens love.",
+    money: "You tend to accumulate quietly and value security and a comfortable home. You're not flashy and you can be cautious or anxious about money. Building steady reserves suits you, but don't let financial worry live silently in the background \u2014 name it and plan for it."
+  },
+  '\u8d2a\u72fc': {
+    pinyin: 'Tanlang', name: 'The Artistic Adventurer',
+    essence: 'Charismatic, versatile, and hungry for experience \u2014 you want to taste everything life has to offer.',
+    chips: ['Charismatic', 'Multi-talented', 'Adventurous'],
+    snapshot: "You're sociable, talented, and full of appetite \u2014 for experiences, people, pleasure, and possibility. You can do a bit of everything and you light up a room. But the same hunger that makes you vivid can scatter you, and chasing the next thing can pull you away from depth and follow-through.",
+    strengths: ['Charismatic and socially magnetic', 'Talented across many areas', 'Quick to seize an opportunity'],
+    watchouts: ['Scattered by chasing novelty', 'Can be indulgent or excessive', 'Struggles with depth and follow-through'],
+    personality: "You're a creature of desire and possibility \u2014 curious, charming, versatile, and always drawn to what's new. You collect skills, experiences, and people easily. The shadow is restlessness and excess: starting more than you finish and reaching for stimulation over substance.",
+    career: "You thrive in dynamic, social, creative, or entrepreneurial roles where variety and charm pay off \u2014 sales, the arts, networking-heavy fields, anything with movement. Routine suffocates you. Your growth lies in committing deeply enough to convert your many talents into real mastery.",
+    love: "You're flirtatious, exciting, and magnetic, and relationships with you are rarely boring. But your appetite for novelty can make commitment and depth a challenge. The work is choosing presence and depth with one person over the constant pull toward what's new and shiny.",
+    money: "You can make money through charm, talent, and bold opportunity-taking, but you also spend freely on pleasure and experiences. Feast-or-famine is a real risk. Channeling your appetite into building something \u2014 and curbing impulse spending \u2014 steadies your finances."
+  },
+  '\u5de8\u95e8': {
+    pinyin: 'Jumen', name: 'The Honest Voice',
+    essence: "Articulate, skeptical, and truth-seeking \u2014 you ask the questions others won't and say what others won't.",
+    chips: ['Articulate', 'Analytical', 'Truth-seeking'],
+    snapshot: "You're sharp with words and ideas, naturally skeptical, and driven to get to the truth of things. You're a strong communicator, researcher, and debater. But your bluntness and questioning can rub people the wrong way, and 'mouth' and misunderstanding are recurring themes you have to manage.",
+    strengths: ['Powerful, persuasive communicator', 'Analytical and good at digging deep', 'Honest \u2014 says what needs saying'],
+    watchouts: ['Bluntness causes friction', 'Can be suspicious or overly critical', 'Words get you into trouble'],
+    personality: "You have a questioning, analytical mind and a gift for language \u2014 you probe, research, and articulate things precisely. You won't accept things at face value. The shadow is a pull toward suspicion, criticism, and conflict; the directness that makes you honest can also wound or alienate.",
+    career: "You excel where words, analysis, and a willingness to question pay off \u2014 law, research, writing, teaching, media, expertise of any kind. You're the one who finds the flaw and names it. Growth comes from tempering directness with tact so people hear your insight, not your edge.",
+    love: "You communicate openly and value honesty in a partner, but your critical, debating side can create friction up close. Small remarks land harder than you intend. Learning when to soften \u2014 and when not to say the sharp true thing \u2014 protects the bonds you care about.",
+    money: "You can do well in knowledge- and communication-based fields, and you're analytical about money. But disputes, miscommunication, or a contrarian streak can cost you. Clear agreements and choosing your battles serve your finances as much as your relationships."
+  },
+  '\u5929\u76f8': {
+    pinyin: 'Tianxiang', name: 'The Noble Mediator',
+    essence: "Diplomatic, loyal, and fair \u2014 you're the trusted right hand who makes everything run with grace.",
+    chips: ['Diplomatic', 'Loyal', 'Fair-minded'],
+    snapshot: "You're tactful, dependable, and good with people \u2014 the one who smooths conflicts and keeps things dignified and fair. You make an outstanding second-in-command and you care about doing things properly. But you can struggle to decide alone, and you may follow when you'd be better off leading.",
+    strengths: ['Diplomatic and good at managing people', 'Loyal, fair, and dependable', 'Brings dignity and order to any team'],
+    watchouts: ['Indecisive without input', 'Can be too dependent on others', 'Avoids conflict and follows rather than leads'],
+    personality: "You're a harmonizer and a steady supporter with a strong sense of fairness and propriety. You read situations well and help people get along. The shadow is reliance \u2014 leaning on others to decide and set direction, and avoiding conflict to the point that your own wants go unspoken.",
+    career: "You shine as the trusted deputy, coordinator, advisor, or manager \u2014 the person who makes the leader and the team better. You handle people and process with grace. Your growth edge is backing your own judgment and stepping into the lead instead of always playing support.",
+    love: "You're loyal, considerate, and devoted, and you work hard to keep a relationship balanced and harmonious. You give a lot. Watch the tendency to defer to your partner's wishes or smooth over friction until your own needs disappear.",
+    money: "You're sensible and balanced with money and you handle others' resources responsibly. You're rarely reckless. Your blind spot is decisiveness \u2014 relying too much on others' financial advice instead of trusting your own well-informed judgment."
+  },
+  '\u5929\u6881': {
+    pinyin: 'Tianliang', name: 'The Wise Protector',
+    essence: "Principled, protective, and wise beyond your years \u2014 you're the mentor who carries others through.",
+    chips: ['Principled', 'Protective', 'Mentor-like'],
+    snapshot: "You're responsible, mature, and naturally protective \u2014 the one people come to for advice and shelter in a storm. You have strong principles and a knack for solving others' problems. But you can become preachy or controlling, and you take on burdens that aren't yours to carry.",
+    strengths: ['Wise, steady, and reassuring', 'Strong principles and integrity', 'A natural mentor and problem-solver'],
+    watchouts: ['Can be preachy or moralizing', "Takes on burdens that aren't yours", 'Stubborn about being right'],
+    personality: "You carry an old-soul steadiness and a protective, principled streak \u2014 you look out for people and take the moral high ground seriously. You're the advisor, the elder, the safe harbor. The shadow is righteousness and over-responsibility: lecturing, controlling, and shouldering everyone's load until you're worn down.",
+    career: "You thrive where guidance, integrity, and care matter \u2014 teaching, mentoring, medicine, law, advisory or caretaking roles, public service. You're trusted and you solve problems. Growth comes from empowering people to carry their own weight instead of rescuing and directing them.",
+    love: "You're a protective, dependable, deeply caring partner who looks after the people you love. You give security. The edge to watch: parenting your partner, moralizing, or carrying the relationship so much that it becomes lopsided rather than equal.",
+    money: "You're prudent and principled with money, and others trust you with theirs. You're not driven by greed. Your risk is over-giving \u2014 bailing people out or sacrificing your own security for others \u2014 so protect your own foundation while you help."
+  },
+  '\u4e03\u6740': {
+    pinyin: 'Qisha', name: 'The Fearless Trailblazer',
+    essence: 'Bold, independent, and unstoppable \u2014 you charge at what you want and live by your own code.',
+    chips: ['Bold', 'Independent', 'Decisive'],
+    snapshot: "You're courageous, decisive, and fiercely self-reliant \u2014 when you set your sights on something, you go, full force. You're a natural pioneer who'd rather forge your own path than follow. But your intensity and all-or-nothing drive can make you impulsive, solitary, and hard for people to get close to.",
+    strengths: ['Fearless and decisive', 'Fiercely independent and self-reliant', 'Thrives on challenge and pioneering'],
+    watchouts: ['Impulsive and all-or-nothing', 'Can be harsh or solitary', 'Restless \u2014 struggles to settle'],
+    personality: "You have a warrior's spirit \u2014 bold, driven, and uncompromising, with a strong need to do things your own way. You're at your best facing a challenge head-on. The shadow is intensity without brakes: charging in impulsively, going it alone, and keeping people at arm's length behind your independence.",
+    career: "You belong where boldness and autonomy pay off \u2014 entrepreneurship, high-stakes or competitive fields, anything pioneering or demanding decisive action. You're wasted in slow, hierarchical roles. Growth comes from patience, follow-through, and letting others in rather than carrying every battle solo.",
+    love: "You're passionate and protective, but your independence and intensity make closeness a challenge \u2014 you guard your autonomy fiercely. A partner may struggle to feel let in. Learning to soften, to stay, and to let someone matter as much as your mission is the deep work for you.",
+    money: "You can build wealth through bold, decisive action and sheer drive, but impulsiveness and risk-taking can also cost you. You may swing between big wins and big losses. Discipline and patience turn your courage into lasting financial strength."
+  },
+  '\u7834\u519b': {
+    pinyin: 'Pojun', name: 'The Bold Transformer',
+    essence: "A revolutionary spirit \u2014 you tear down what's stale to build something new, and you can't stand standing still.",
+    chips: ['Pioneering', 'Bold', 'Loves change'],
+    snapshot: "You're a force of change \u2014 restless, daring, and drawn to break old patterns and start fresh. You go all-in on reinvention and you're not afraid to upend things. But your appetite for upheaval can become volatility, and the constant tearing-down can cost you stability and burn bridges you'll miss.",
+    strengths: ['Fearless innovator and pioneer', 'Thrives in change and crisis', 'All-in energy once committed'],
+    watchouts: ['Volatile \u2014 destroys before rebuilding', 'Restless and prone to upheaval', 'Can be reckless or burn bridges'],
+    personality: "You're wired for transformation \u2014 you'd rather break and remake than maintain, and stagnation is unbearable to you. You bring enormous energy to reinvention and you're fierce and loyal once committed. The shadow is chaos: constant upheaval, impulsive demolition, and a trail of disruption you sometimes regret.",
+    career: "You thrive in change, turnarounds, startups, crisis, or any frontier that rewards reinvention and bold moves. You're wasted maintaining a steady machine. Growth comes from building and keeping, not just breaking and starting over \u2014 and from aiming your energy so it creates more than it costs.",
+    love: "You bring passion and intensity, and you're loyal once you've committed \u2014 but your restlessness and appetite for change can destabilize relationships. You may blow things up rather than work them through. Learning to build and sustain, not just ignite, is what makes love last.",
+    money: "Your finances can be feast-or-famine \u2014 bold moves, big swings, and a tendency to spend or gamble on reinvention. You can rebuild from nothing, which is a strength, but the volatility wears on you. Building a stable base beneath your bold bets is what protects you."
+  }
+};
+
+// When a Life Palace holds two major stars, this picks the more defining headliner.
+const ARCHETYPE_PRIORITY = ['\u7d2b\u5fae','\u5929\u5e9c','\u4e03\u6740','\u7834\u519b','\u8d2a\u72fc','\u592a\u9633','\u592a\u9634','\u6b66\u66f2','\u5ec9\u8d1e','\u5929\u673a','\u5de8\u95e8','\u5929\u6881','\u5929\u76f8','\u5929\u540c'];
+
+// ====================================================================
+//  TIER 2: Full paragraphs for Spouse, Wealth, Career x 14 stars
+// ====================================================================
+const TIER2_PARAGRAPHS = {
+  '\u592b\u59bb': {
+    '\u7d2b\u5fae': "You need a partner who respects your authority and gives you space to lead. You're loyal and protective, but your dignified reserve can read as emotional distance. True intimacy comes when you let your guard down.",
+    '\u5929\u5e9c': "You seek stability and comfort in love. You're a dependable, providing partner who shows love through reliability. Watch the tendency to stay in comfortable-but-stale relationships out of fear of upheaval.",
+    '\u5929\u673a': "Mental connection is your love language \u2014 you need a partner who stimulates your mind. You're attentive and considerate, but overthinking and restlessness can create problems where none exist. Learning to trust 'good enough' deepens your bond.",
+    '\u592a\u9633': "You love generously and warmly, wanting a partner you can be proud of. You give a lot and need recognition for it. Watch over-giving and the bluntness that slips out when you're depleted.",
+    '\u6b66\u66f2': "You show love through actions, not words \u2014 loyalty, protection, and providing. Emotional expression doesn't come naturally to you. A partner may need more warmth than comes easily. Letting yourself be soft is the work that keeps you from feeling alone.",
+    '\u5929\u540c': "You're sweet, affectionate, and genuinely want everyone happy in love. You nurture closeness well. The risk: avoiding hard conversations to keep the peace, which lets small problems quietly grow into big ones.",
+    '\u5ec9\u8d1e': "You love intensely and magnetically \u2014 relationships with you run hot. Passion is your gift, but it can curdle into possessiveness or drama. Growth lies in trusting enough to loosen your grip.",
+    '\u592a\u9634': "You love tenderly and deeply, craving emotional safety and intimacy. You're attentive and caring, but you can withdraw or go silent when hurt. Letting a partner into your inner world \u2014 and not taking everything so personally \u2014 is the work that deepens love.",
+    '\u8d2a\u72fc': "You're flirtatious, exciting, and magnetic in love \u2014 relationships with you are never boring. But your appetite for novelty can make commitment a challenge. The work is choosing depth with one person over the pull toward what's new.",
+    '\u5de8\u95e8': "You communicate openly and value honesty in love, but your critical, debating side creates friction up close. Small remarks land harder than you intend. Learning when to soften \u2014 and when not to say the sharp true thing \u2014 protects the bonds you care about.",
+    '\u5929\u76f8': "You're loyal, considerate, and devoted, working hard to keep love balanced and harmonious. You give a lot. Watch the tendency to defer to your partner's wishes or smooth over friction until your own needs disappear entirely.",
+    '\u5929\u6881': "You're protective, dependable, and deeply caring \u2014 you give security in love. The edge to watch: parenting your partner, moralizing, or carrying the relationship so much that it becomes lopsided rather than equal.",
+    '\u4e03\u6740': "You're passionate and protective, but your fierce independence makes closeness a challenge. A partner may struggle to feel let in. Learning to soften, to stay, and to let someone matter as much as your mission is the deep work for you.",
+    '\u7834\u519b': "You bring passion and intensity to love, and you're loyal once committed. But your restlessness and appetite for change can destabilize relationships. You may blow things up rather than work them through. Learning to build and sustain, not just ignite, is what makes love last."
+  },
+  '\u8d22\u5e1b': {
+    '\u7d2b\u5fae': "You think big when it comes to wealth \u2014 comfort and status matter to you. You're rarely reckless, but can overspend on things that signal standing. Your financial strength comes from surrounding yourself with capable people who handle the details you find tedious.",
+    '\u5929\u5e9c': "You're naturally good with money \u2014 saving, managing, accumulating steadily. You rarely overspend and build a cushion by instinct. Your blind spot is being so risk-averse you miss opportunities; some of your security would be safer if it were also growing.",
+    '\u5929\u673a': "You're clever at spotting financial opportunities, but indecision and changing plans work against you. You may research endlessly then hesitate. A simple, automated, stick-to-it strategy beats your instinct to constantly re-optimize.",
+    '\u592a\u9633': "You're generous with money, often to a fault \u2014 giving, lending, treating freely. You earn through effort and visibility. Your finances improve when you let yourself receive and keep as readily as you give.",
+    '\u6b66\u66f2': "This is your home turf \u2014 you're disciplined, decisive, and capable of building real wealth. You manage money well and aren't easily swayed. Your only risk is treating money or work as a substitute for the emotional life you find harder to build.",
+    '\u5929\u540c': "You're not especially driven by money and like to enjoy life, which can mean spending on comfort and pleasure. You're rarely greedy, but can be lax about planning. A little structure and a nudge toward saving go a long way for you.",
+    '\u5ec9\u8d1e': "You can be disciplined with money when focused, but intensity can also drive impulsive or risky moves. You may swing between strict control and indulgence. Steadiness and self-awareness around your impulses are your financial allies.",
+    '\u592a\u9634': "You tend to accumulate quietly and value security and a comfortable home. You're not flashy. You can be cautious or anxious about money. Building steady reserves suits you \u2014 but don't let financial worry live silently in the background.",
+    '\u8d2a\u72fc': "You can make money through charm, talent, and bold opportunity-taking, but you also spend freely on pleasure and experiences. Feast-or-famine is a real risk. Channeling your appetite into building something \u2014 and curbing impulse spending \u2014 steadies your finances.",
+    '\u5de8\u95e8': "You can do well in knowledge- and communication-based income, and you're analytical about money. But disputes, miscommunication, or a contrarian streak can cost you. Clear agreements and choosing your battles serve your finances.",
+    '\u5929\u76f8': "You're sensible and balanced with money, handling resources responsibly. You're rarely reckless. Your blind spot is decisiveness \u2014 relying too much on others' financial advice instead of trusting your own well-informed judgment.",
+    '\u5929\u6881': "You're prudent and principled with money, and others trust you with theirs. You're not driven by greed. Your risk is over-giving \u2014 bailing people out or sacrificing your own security for others. Protect your own foundation while you help.",
+    '\u4e03\u6740': "You can build wealth through bold, decisive action and sheer drive, but impulsiveness and risk-taking can also cost you. Big wins and big losses both happen. Discipline and patience turn your courage into lasting financial strength.",
+    '\u7834\u519b': "Your finances can be feast-or-famine \u2014 bold moves, big swings, and a tendency to spend or gamble on reinvention. You can rebuild from nothing, which is a strength, but the volatility wears on you. Building a stable base beneath your bold bets is what protects you."
+  },
+  '\u5b98\u7984': {
+    '\u7d2b\u5fae': "You're built to lead, set vision, or own something rather than take orders inside someone else's machine. You do best with capable specialists who handle execution while you steer. Watch wanting the title and respect before you've built the team.",
+    '\u5929\u5e9c': "You shine in roles that reward stewardship \u2014 operations, finance, managing assets, running an established thing well. You're the safe pair of hands. Growth comes from occasionally backing yourself to take a calculated risk.",
+    '\u5929\u673a': "You're a natural strategist, analyst, planner, or advisor \u2014 anywhere insight matters more than brute execution. You thrive on variety and problem-solving. Your growth edge is committing to a direction long enough to see it through.",
+    '\u592a\u9633': "You belong in visible, people-facing, or leadership roles \u2014 teaching, public work, anything where your warmth and drive light up a room. The lesson is pacing: protecting your energy so your generosity is sustainable, not a slow burnout.",
+    '\u6b66\u66f2': "You excel where execution, money, and decisiveness matter \u2014 finance, operations, engineering, building things. You're the one who delivers. Growth comes from developing the people-and-emotion skills that turn a strong operator into a leader.",
+    '\u5929\u540c': "You do well in supportive, creative, people-soothing, or lifestyle-oriented roles. You're not built for cutthroat environments. Your growth edge is supplying your own drive and structure so your gentleness doesn't become drift.",
+    '\u5ec9\u8d1e': "You do well where intensity, discipline, and edge combine \u2014 leadership, law, anything demanding focus and willpower, or creative-but-structured fields. You can grind hard toward a goal. Watch the controlling, all-or-nothing streak.",
+    '\u592a\u9634': "You thrive in nurturing, creative, intuitive, or behind-the-scenes roles \u2014 caregiving, the arts, research, anything with depth and a humane pace. Harsh, aggressive environments drain you. Growth is sharing your gifts visibly instead of hiding.",
+    '\u8d2a\u72fc': "You thrive in dynamic, social, creative, or entrepreneurial roles where variety and charm pay off \u2014 sales, the arts, networking-heavy fields. Routine suffocates you. Growth lies in committing deeply enough to convert many talents into mastery.",
+    '\u5de8\u95e8': "You excel where words, analysis, and a willingness to question pay off \u2014 law, research, writing, teaching, media, expertise of any kind. You find the flaw and name it. Growth comes from tempering directness with tact so people hear your insight.",
+    '\u5929\u76f8': "You shine as the trusted deputy, coordinator, advisor, or manager \u2014 the person who makes the leader and team better. You handle people and process with grace. Your growth edge is backing your own judgment and stepping into the lead.",
+    '\u5929\u6881': "You thrive where guidance, integrity, and care matter \u2014 teaching, mentoring, medicine, law, advisory, public service. You're trusted. Growth comes from empowering people to carry their own weight instead of rescuing them.",
+    '\u4e03\u6740': "You belong where boldness and autonomy pay off \u2014 entrepreneurship, high-stakes fields, anything pioneering. You're wasted in slow, hierarchical roles. Growth comes from patience, follow-through, and letting others in.",
+    '\u7834\u519b': "You thrive in change, turnarounds, startups, crisis, or any frontier that rewards reinvention. You're wasted maintaining a steady machine. Growth comes from building and keeping, not just breaking and starting over."
+  }
+};
+
+// ====================================================================
+//  Tier 1: Palace reading templates (one-liners per palace domain)
+// ====================================================================
+const PALACE_DOMAIN_QUALITIES = {
+  '\u547d\u5bab': "{{STAR_EN}} defines your core self. Your personality, temperament, and life direction are shaped by this star's nature.",
+  '\u5144\u5f1f': "{{STAR_EN}} colors your peer and sibling dynamics. {{DOMAIN_QUALITY}}",
+  '\u592b\u59bb': "{{STAR_EN}} shapes your approach to love and partnership. {{DOMAIN_QUALITY}}",
+  '\u5b50\u5973': "{{STAR_EN}} influences your relationship with children and creative expression. {{DOMAIN_QUALITY}}",
+  '\u8d22\u5e1b': "{{STAR_EN}} governs your relationship with money and material resources. {{DOMAIN_QUALITY}}",
+  '\u75be\u5384': "{{STAR_EN}} reflects your inner state and physical constitution. {{DOMAIN_QUALITY}}",
+  '\u8fc1\u79fb': "{{STAR_EN}} reveals how you relate to the outer world, travel, and external opportunities. {{DOMAIN_QUALITY}}",
+  '\u4ea4\u53cb': "{{STAR_EN}} shapes your social circle and how you connect with others. {{DOMAIN_QUALITY}}",
+  '\u4ecd\u5f79': "{{STAR_EN}} shapes your social circle and how you connect with others. {{DOMAIN_QUALITY}}",
+  '\u5b98\u7984': "{{STAR_EN}} governs your career, calling, and public life. {{DOMAIN_QUALITY}}",
+  '\u7530\u5b85': "{{STAR_EN}} reflects your relationship with home, property, and domestic stability. {{DOMAIN_QUALITY}}",
+  '\u798f\u5fb7': "{{STAR_EN}} reveals your inner happiness, spiritual life, and mental well-being. {{DOMAIN_QUALITY}}",
+  '\u7236\u6bcd': "{{STAR_EN}} shapes your relationship with authority figures and your origins. {{DOMAIN_QUALITY}}"
+};
+
+const DOMAIN_SPECIFIC_QUALITIES = {
+  '\u5144\u5f1f': {
+    '\u7d2b\u5fae': "You naturally take the lead among your peers and expect respect in your circles.",
+    '\u5929\u5e9c': "You're the steady, reliable one in your peer group \u2014 people count on you.",
+    '\u5929\u673a': "Your sibling and peer relationships are mentally stimulating but sometimes complicated by overthinking.",
+    '\u592a\u9633': "You're warm and generous with friends and siblings, often the one who gives the most.",
+    '\u6b66\u66f2': "You show loyalty to your peers through action and protection, not emotional words.",
+    '\u5929\u540c': "You get along well with peers and prefer harmonious, low-drama relationships.",
+    '\u5ec9\u8d1e': "Your peer relationships are intense and can swing between deep loyalty and friction.",
+    '\u592a\u9634': "You're caring and emotionally attuned to your siblings and friends, but can be oversensitive.",
+    '\u8d2a\u72fc': "Your social circle is wide and lively, but keeping deep, lasting bonds takes work.",
+    '\u5de8\u95e8': "You're honest and direct with peers, which builds trust but can also spark debates.",
+    '\u5929\u76f8': "You're the diplomat in your social circle, keeping things balanced and harmonious.",
+    '\u5929\u6881': "You naturally mentor and protect your peers, sometimes taking on a parental role.",
+    '\u4e03\u6740': "You value independence in relationships and may keep peers at a certain distance.",
+    '\u7834\u519b': "Your peer relationships go through phases of upheaval and renewal."
+  },
+  '\u592b\u59bb': {
+    '\u7d2b\u5fae': "You need a partner who respects your authority and gives you space to lead.",
+    '\u5929\u5e9c': "You seek stability and comfort in love, showing care through reliability.",
+    '\u5929\u673a': "Mental connection is your love language \u2014 you need a partner who stimulates your mind.",
+    '\u592a\u9633': "You love generously and warmly, wanting a partner you can be proud of.",
+    '\u6b66\u66f2': "You show love through actions, not words \u2014 loyalty, protection, and providing.",
+    '\u5929\u540c': "You're sweet, affectionate, and genuinely want everyone happy in love.",
+    '\u5ec9\u8d1e': "You love intensely and magnetically \u2014 relationships with you run hot.",
+    '\u592a\u9634': "You love tenderly and deeply, craving emotional safety and intimacy.",
+    '\u8d2a\u72fc': "You're flirtatious, exciting, and magnetic in love \u2014 never boring.",
+    '\u5de8\u95e8': "You communicate openly and value honesty, but your critical side creates friction.",
+    '\u5929\u76f8': "You're loyal, considerate, and devoted, working hard to keep love balanced.",
+    '\u5929\u6881': "You're protective, dependable, and deeply caring \u2014 you give security in love.",
+    '\u4e03\u6740': "You're passionate and protective, but your fierce independence makes closeness a challenge.",
+    '\u7834\u519b': "You bring passion and intensity to love, and you're loyal once committed."
+  },
+  '\u5b50\u5973': {
+    '\u7d2b\u5fae': "You take a dignified, authoritative approach to parenting and creative projects.",
+    '\u5929\u5e9c': "You're a stable, providing presence for children and creative endeavors.",
+    '\u5929\u673a': "You engage children through ideas and intellectual stimulation.",
+    '\u592a\u9633': "You're warm, generous, and visible in your children's lives.",
+    '\u6b66\u66f2': "You provide structure and discipline, showing care through protection.",
+    '\u5929\u540c': "You're gentle and nurturing, creating a comfortable environment for children.",
+    '\u5ec9\u8d1e': "Your relationship with children is intense and deeply felt.",
+    '\u592a\u9634': "You're emotionally attuned and nurturing, with strong intuitive bonds.",
+    '\u8d2a\u72fc': "You bring fun, excitement, and variety to your relationship with children.",
+    '\u5de8\u95e8': "You value honest communication and intellectual development with children.",
+    '\u5929\u76f8': "You're caring and attentive, working hard to create harmony for children.",
+    '\u5929\u6881': "You're protective and mentoring, sometimes taking on too much responsibility.",
+    '\u4e03\u6740': "You're passionate but may struggle with the everyday patience parenting demands.",
+    '\u7834\u519b': "Your approach to children and creativity goes through transformative phases."
+  },
+  '\u8d22\u5e1b': {
+    '\u7d2b\u5fae': "Comfort and status matter \u2014 you think big about wealth.",
+    '\u5929\u5e9c': "You're naturally good with money \u2014 saving and managing steadily.",
+    '\u5929\u673a': "You're clever at spotting opportunities but indecision works against you.",
+    '\u592a\u9633': "You're generous to a fault \u2014 giving and lending freely.",
+    '\u6b66\u66f2': "This is your home turf \u2014 disciplined and capable of building real wealth.",
+    '\u5929\u540c': "You enjoy spending on comfort; a little structure goes a long way.",
+    '\u5ec9\u8d1e': "You swing between financial discipline and impulsive moves.",
+    '\u592a\u9634': "You accumulate quietly and value security above flashiness.",
+    '\u8d2a\u72fc': "Feast-or-famine is a real risk; channel your appetite into building.",
+    '\u5de8\u95e8': "Knowledge-based income suits you; watch for disputes that cost you.",
+    '\u5929\u76f8': "You're sensible and balanced, but sometimes rely too much on others' advice.",
+    '\u5929\u6881': "You're prudent but risk over-giving and sacrificing your own security.",
+    '\u4e03\u6740': "Bold action builds wealth but impulsiveness can cost you.",
+    '\u7834\u519b': "Your finances are volatile \u2014 bold swings and reinvention bets."
+  },
+  '\u75be\u5384': {
+    '\u7d2b\u5fae': "Your health is tied to stress management \u2014 your body reflects your sense of control.",
+    '\u5929\u5e9c': "You tend toward robust health but can overindulge in comfort.",
+    '\u5929\u673a': "Your physical issues often stem from overthinking and nervous tension.",
+    '\u592a\u9633': "You run hot \u2014 watch for burnout, eye strain, and overexertion.",
+    '\u6b66\u66f2': "Your body is strong but stiff \u2014 watch your joints, teeth, and breathing.",
+    '\u5929\u540c': "You're generally healthy but can be lax about self-care when comfortable.",
+    '\u5ec9\u8d1e': "Your intensity can manifest as internal heat or tension \u2014 channel it wisely.",
+    '\u592a\u9634': "Your sensitivity shows up physically \u2014 digestion, cycles, and energy fluctuate.",
+    '\u8d2a\u72fc': "Excess is your health risk \u2014 moderation in all things is your medicine.",
+    '\u5de8\u95e8': "Stress shows up in your digestion and nervous system \u2014 calm your mind.",
+    '\u5929\u76f8': "You're sensitive to your environment and absorb others' stress physically.",
+    '\u5929\u6881': "You're generally resilient but can carry others' health burdens as your own.",
+    '\u4e03\u6740': "Your boldness extends to your body \u2014 watch for injuries and impulsive risks.",
+    '\u7834\u519b': "Your health goes through phases of intensity and rebuilding \u2014 pace yourself."
+  },
+  '\u8fc1\u79fb': {
+    '\u7d2b\u5fae': "You project authority in the outer world and attract respect from strangers.",
+    '\u5929\u5e9c': "Travel and external opportunities tend to be comfortable and productive for you.",
+    '\u5929\u673a': "Your outer life is full of movement and change \u2014 you benefit from variety.",
+    '\u592a\u9633': "You shine outside your familiar environment \u2014 visibility grows with distance.",
+    '\u6b66\u66f2': "Your outer world rewards decisiveness and capability.",
+    '\u5929\u540c': "You're well-liked outside your comfort zone, but may lack drive to push further.",
+    '\u5ec9\u8d1e': "Your public life is intense and can swing between highs and lows.",
+    '\u592a\u9634': "You thrive in quiet, behind-the-scenes outer roles rather than the spotlight.",
+    '\u8d2a\u72fc': "Your social life outside is vibrant and full of opportunity \u2014 and temptation.",
+    '\u5de8\u95e8': "Your external reputation rests on your words and ideas.",
+    '\u5929\u76f8': "You navigate the outer world with grace and diplomacy.",
+    '\u5929\u6881': "You're a guiding presence outside \u2014 people seek your advice and protection.",
+    '\u4e03\u6740': "Your outer life rewards boldness and independence \u2014 go where others won't.",
+    '\u7834\u519b': "Reinvention in the outer world is your pattern \u2014 new places, new chapters."
+  },
+  '\u4ea4\u53cb': {
+    '\u7d2b\u5fae': "You attract powerful, capable friends and expect a certain standard from your circle.",
+    '\u5929\u5e9c': "Your friends are reliable and your social life is stable and comfortable.",
+    '\u5929\u673a': "Your social connections are intellectually stimulating but sometimes unstable.",
+    '\u592a\u9633': "You're generous and warm in friendship, often the sun of your social group.",
+    '\u6b66\u66f2': "You show loyalty to friends through actions; you have few but deep connections.",
+    '\u5929\u540c': "You're easygoing and well-liked, but may avoid confronting friends when needed.",
+    '\u5ec9\u8d1e': "Your friendships are intense and magnetic but can bring drama.",
+    '\u592a\u9634': "You're deeply caring toward friends but can be hurt easily.",
+    '\u8d2a\u72fc': "You have a wide, lively social circle full of interesting characters.",
+    '\u5de8\u95e8': "You value honesty and depth in friendship but your bluntness can cause rifts.",
+    '\u5929\u76f8': "You're the harmonizer and diplomat in your social circle.",
+    '\u5929\u6881': "You mentor and protect your friends, sometimes carrying their burdens.",
+    '\u4e03\u6740': "You value independence in friendship and may keep people at a certain distance.",
+    '\u7834\u519b': "Your social circle goes through dramatic phases of change."
+  },
+  '\u4f6e\u5f79': {
+    '\u7d2b\u5fae': "You attract powerful, capable friends and expect a certain standard from your circle.",
+    '\u5929\u5e9c': "Your friends are reliable and your social life is stable and comfortable.",
+    '\u5929\u673a': "Your social connections are intellectually stimulating but sometimes unstable.",
+    '\u592a\u9633': "You're generous and warm in friendship, often the sun of your social group.",
+    '\u6b66\u66f2': "You show loyalty to friends through actions; you have few but deep connections.",
+    '\u5929\u540c': "You're easygoing and well-liked, but may avoid confronting friends when needed.",
+    '\u5ec9\u8d1e': "Your friendships are intense and magnetic but can bring drama.",
+    '\u592a\u9634': "You're deeply caring toward friends but can be hurt easily.",
+    '\u8d2a\u72fc': "You have a wide, lively social circle full of interesting characters.",
+    '\u5de8\u95e8': "You value honesty and depth in friendship but your bluntness can cause rifts.",
+    '\u5929\u76f8': "You're the harmonizer and diplomat in your social circle.",
+    '\u5929\u6881': "You mentor and protect your friends, sometimes carrying their burdens.",
+    '\u4e03\u6740': "You value independence in friendship and may keep people at a certain distance.",
+    '\u7834\u519b': "Your social circle goes through dramatic phases of change."
+  },
+  '\u5b98\u7984': {
+    '\u7d2b\u5fae': "You're built to lead, set vision, or own something rather than take orders.",
+    '\u5929\u5e9c': "You shine in stewardship roles \u2014 operations, finance, running established things well.",
+    '\u5929\u673a': "You're a natural strategist, analyst, or advisor \u2014 insight matters more than execution.",
+    '\u592a\u9633': "You belong in visible, people-facing, or leadership roles.",
+    '\u6b66\u66f2': "You excel where execution, money, and decisiveness matter.",
+    '\u5929\u540c': "You do well in supportive, creative, or lifestyle-oriented roles.",
+    '\u5ec9\u8d1e': "You do well where intensity, discipline, and edge combine.",
+    '\u592a\u9634': "You thrive in nurturing, creative, or behind-the-scenes roles.",
+    '\u8d2a\u72fc': "You thrive in dynamic, social, creative, or entrepreneurial roles.",
+    '\u5de8\u95e8': "You excel where words, analysis, and questioning pay off.",
+    '\u5929\u76f8': "You shine as the trusted deputy, coordinator, or advisor.",
+    '\u5929\u6881': "You thrive where guidance, integrity, and care matter.",
+    '\u4e03\u6740': "You belong where boldness and autonomy pay off.",
+    '\u7834\u519b': "You thrive in change, turnarounds, startups, or any frontier."
+  },
+  '\u7530\u5b85': {
+    '\u7d2b\u5fae': "Your home reflects your sense of status and dignity \u2014 you want it impressive.",
+    '\u5929\u5e9c': "Your home is your sanctuary \u2014 stable, comfortable, and well-managed.",
+    '\u5929\u673a': "Your living situation may change frequently or you're always planning the next renovation.",
+    '\u592a\u9633': "Your home is warm and generous \u2014 a place of gathering and giving.",
+    '\u6b66\u66f2': "You're practical and disciplined about property, treating it as a real asset.",
+    '\u5929\u540c': "You love a comfortable, harmonious home and may overspend on coziness.",
+    '\u5ec9\u8d1e': "Your home life can be intense \u2014 passion and tension both live there.",
+    '\u592a\u9634': "You're deeply attached to home and need a beautiful, peaceful living space.",
+    '\u8d2a\u72fc': "Your home reflects your love of variety and pleasure \u2014 and your restlessness.",
+    '\u5de8\u95e8': "Issues at home often revolve around communication and misunderstanding.",
+    '\u5929\u76f8': "You maintain a harmonious, well-organized home environment.",
+    '\u5929\u6881': "You're protective of your home and may carry responsibility for family property.",
+    '\u4e03\u6740': "You value independence in your home life and may move frequently.",
+    '\u7834\u519b': "Your home life goes through cycles of upheaval and rebuilding."
+  },
+  '\u798f\u5fb7': {
+    '\u7d2b\u5fae': "Your inner happiness comes from feeling respected and in control of your life.",
+    '\u5929\u5e9c': "Contentment comes from security, comfort, and a well-ordered inner world.",
+    '\u5929\u673a': "Your mind is your greatest source of joy \u2014 and your greatest source of unrest.",
+    '\u592a\u9633': "You find meaning in giving and being visible, but must protect your inner fire.",
+    '\u6b66\u66f2': "Your peace of mind comes from achievement and tangible results.",
+    '\u5929\u540c': "You naturally find contentment in simple pleasures and good feelings.",
+    '\u5ec9\u8d1e': "Your inner life is intense and complex \u2014 peace comes from self-mastery.",
+    '\u592a\u9634': "Your inner world is rich and deep, but can be a source of worry and moodiness.",
+    '\u8d2a\u72fc': "You chase stimulation and pleasure, but deep contentment requires choosing depth.",
+    '\u5de8\u95e8': "You process the world through analysis and words, which can fuel inner tension.",
+    '\u5929\u76f8': "Your inner peace depends on external harmony \u2014 imbalance in relationships affects you deeply.",
+    '\u5929\u6881': "You find meaning in helping others and living by your principles.",
+    '\u4e03\u6740': "Restlessness is your inner challenge \u2014 learning to be still is the deep work.",
+    '\u7834\u519b': "Your inner life goes through constant transformation \u2014 stillness is hard but healing."
+  },
+  '\u7236\u6bcd': {
+    '\u7d2b\u5fae': "Your relationship with parents and authority figures carries themes of respect and hierarchy.",
+    '\u5929\u5e9c': "Your parents provided stability; you may inherit or manage family assets.",
+    '\u5929\u673a': "Your relationship with parents involves mental stimulation and sometimes overthinking.",
+    '\u592a\u9633': "One parent (often the father figure) was warm but perhaps over-giving or depleted.",
+    '\u6b66\u66f2': "Your relationship with parents is dutiful but may lack emotional warmth.",
+    '\u5929\u540c': "You had a relatively comfortable upbringing but may have been too sheltered.",
+    '\u5ec9\u8d1e': "Your relationship with parents is intense and may carry unresolved tension.",
+    '\u592a\u9634': "One parent (often the mother figure) was deeply influential and perhaps emotionally complex.",
+    '\u8d2a\u72fc': "Your family background may involve complexity, diversity, or unconventional dynamics.",
+    '\u5de8\u95e8': "Communication with parents was honest but sometimes sharp or argumentative.",
+    '\u5929\u76f8': "Your parents were diplomatic and caring; you may defer to their expectations.",
+    '\u5929\u6881': "A parent was protective and principled; you may carry their legacy heavily.",
+    '\u4e03\u6740': "Your relationship with authority figures was marked by independence and conflict.",
+    '\u7834\u519b': "Your family background involved significant change or upheaval."
+  }
+};
+
+// Palace icons for Tier 1 display
+const PALACE_ICONS = {
+  '\u547d\u5bab': '&#9733;', '\u5144\u5f1f': '&#128101;', '\u592b\u59bb': '&#128145;',
+  '\u5b50\u5973': '&#128118;', '\u8d22\u5e1b': '&#128176;', '\u75be\u5384': '&#128137;',
+  '\u8fc1\u79fb': '&#9992;', '\u4ea4\u53cb': '&#129309;', '\u4f6e\u5f79': '&#129309;', '\u4ec6\u5f79': '&#129309;',
+  '\u5b98\u7984': '&#127891;', '\u7530\u5b85': '&#127968;', '\u798f\u5fb7': '&#9788;',
+  '\u7236\u6bcd': '&#128106;'
+};
+
+// ====================================================================
+//  Translation maps
+// ====================================================================
+const STAR_MAP = {
+    '\u7d2b\u5fae': { en: 'Ziwei', title: 'The Imperial Sovereign' },
+    '\u5929\u673a': { en: 'Tianji', title: 'The Wise Strategist' },
+    '\u592a\u9633': { en: 'Taiyang', title: 'The Radiant Leader' },
+    '\u6b66\u66f2': { en: 'Wuqu', title: 'The Steadfast Guardian' },
+    '\u5929\u540c': { en: 'Tiantong', title: 'The Gentle Peacemaker' },
+    '\u5ec9\u8d1e': { en: 'Lianzhen', title: 'The Enigmatic Charmer' },
+    '\u5929\u5e9c': { en: 'Tianfu', title: 'The Imperial Keeper' },
+    '\u592a\u9634': { en: 'Taiyin', title: 'The Mystic Seer' },
+    '\u8d2a\u72fc': { en: 'Tanlang', title: 'The Artistic Adventurer' },
+    '\u5de8\u95e8': { en: 'Jumen', title: 'The Honest Voice' },
+    '\u5929\u76f8': { en: 'Tianxiang', title: 'The Noble Mediator' },
+    '\u5929\u6881': { en: 'Tianliang', title: 'The Wise Protector' },
+    '\u4e03\u6740': { en: 'Qisha', title: 'The Fearless Trailblazer' },
+    '\u7834\u519b': { en: 'Pojun', title: 'The Bold Transformer' },
+    '\u7984\u5b58': { en: 'Lucun', title: 'The Fortune Star' },
+    '\u5929\u9a6c': { en: 'Tianma', title: 'The Traveling Star' },
+    '\u6587\u660c': { en: 'Wenchang', title: 'The Literary Star' },
+    '\u6587\u66f2': { en: 'Wenqu', title: 'The Artistic Scholar' },
+    '\u5de6\u8f85': { en: 'Zuofu', title: 'The Left Assistant' },
+    '\u53f3\u5f1c': { en: 'Youbi', title: 'The Right Assistant' },
+    '\u5929\u9b41': { en: 'Tiankui', title: 'The Noble Helper' },
+    '\u5929\u94ba': { en: 'Tianyue', title: 'The Hidden Benefactor' },
+    '\u64ce\u7f8a': { en: 'Qingyang', title: 'The Blade Star' },
+    '\u9640\u7f57': { en: 'Tuoluo', title: 'The Spiral Star' },
+    '\u706b\u661f': { en: 'Huoxing', title: 'The Fire Star' },
+    '\u94c3\u661f': { en: 'Lingxing', title: 'The Bell Star' },
+    '\u5730\u7a7a': { en: 'Dikong', title: 'The Earth Void' },
+    '\u5730\u52ab': { en: 'Dijie', title: 'The Earth Robbery' },
+    '\u5929\u59da': { en: 'Tianyao', title: 'The Romantic Star' },
+    '\u7ea2\u9e22': { en: 'Hongluan', title: 'The Red Phoenix' },
+    '\u5929\u559c': { en: 'Tianxi', title: 'The Celestial Joy' },
+    '\u534e\u76d6': { en: 'Huagai', title: 'The Canopy Star' }
+};
+const PALACE_MAP = {
+    '\u547d\u5bab': { en: 'Life', subtitle: 'Core self' },
+    '\u5144\u5f1f': { en: 'Siblings', subtitle: 'Peers' },
+    '\u592b\u59bb': { en: 'Spouse', subtitle: 'Love' },
+    '\u5b50\u5973': { en: 'Children', subtitle: 'Kinship' },
+    '\u8d22\u5e1b': { en: 'Wealth', subtitle: 'Money' },
+    '\u75be\u5384': { en: 'Health', subtitle: 'Inner state' },
+    '\u8fc1\u79fb': { en: 'Travel', subtitle: 'Outer world' },
+    '\u4ea4\u53cb': { en: 'Friends', subtitle: 'Social' },
+    '\u4f6e\u5f79': { en: 'Friends', subtitle: 'Social' },
+    '\u4ec6\u5f79': { en: 'Friends', subtitle: 'Social' },
+    '\u5b98\u7984': { en: 'Career', subtitle: 'Calling' },
+    '\u7530\u5b85': { en: 'Property', subtitle: 'Home' },
+    '\u798f\u5fb7': { en: 'Fortune', subtitle: 'Soul & mood' },
+    '\u7236\u6bcd': { en: 'Parents', subtitle: 'Origins' }
+};
+const BRANCH_EN = { '\u5b50':'Zi','\u4e11':'Chou','\u5bc5':'Yin','\u536f':'Mao','\u8fb0':'Chen','\u5df3':'Si','\u5348':'Wu','\u672a':'Wei','\u7533':'Shen','\u9149':'You','\u620c':'Xu','\u4ea5':'Hai' };
+const STEM_EN = { '\u7532':'Jia','\u4e59':'Yi','\u4e19':'Bing','\u4e01':'Ding','\u620a':'Wu','\u5df1':'Ji','\u5e9a':'Geng','\u8f9b':'Xin','\u58ec':'Ren','\u7678':'Gui' };
+const ZODIAC_EN = { '\u9f20':'Rat','\u725b':'Ox','\u864e':'Tiger','\u5154':'Rabbit','\u9f99':'Dragon','\u86c7':'Snake','\u9a6c':'Horse','\u7f8a':'Goat','\u7334':'Monkey','\u9e21':'Rooster','\u72d7':'Dog','\u732a':'Pig' };
+const SIGN_EN = { '\u767d\u7f8a\u5ea7':'Aries','\u91d1\u725b\u5ea7':'Taurus','\u53cc\u5b50\u5ea7':'Gemini','\u5de8\u87f9\u5ea7':'Cancer','\u72ee\u5b50\u5ea7':'Leo','\u5904\u5973\u5ea7':'Virgo','\u5929\u79e4\u5ea7':'Libra','\u5929\u874e\u5ea7':'Scorpio','\u5c04\u624b\u5ea7':'Sagittarius','\u6469\u697c\u5ea7':'Capricorn','\u6c34\u74f6\u5ea7':'Aquarius','\u53cc\u9c7c\u5ea7':'Pisces' };
+const FIVE_ELEMENTS_EN = { '\u6c34\u4e8c':'Water','\u6c34\u4e09':'Water','\u6728\u4e8c':'Wood','\u6728\u4e09':'Wood','\u91d1\u56db':'Metal','\u91d1\u4e94':'Metal','\u91d1\u516d':'Metal','\u571f\u4e94':'Earth','\u571f\u516d':'Earth','\u706b\u516d':'Fire','\u706b\u4e03':'Fire' };
+const BRANCH_ORDER = ['\u5bc5','\u536f','\u8fb0','\u5df3','\u5348','\u672a','\u7533','\u9149','\u620c','\u4ea5','\u5b50','\u4e11'];
+const PALACE_ORDER = ['\u547d\u5bab','\u5144\u5f1f','\u592b\u59bb','\u5b50\u5973','\u8d22\u5e1b','\u75be\u5384','\u8fc1\u79fb','\u4ea4\u53cb','\u5b98\u7984','\u7530\u5b85','\u798f\u5fb7','\u7236\u6bcd'];
+
+// Palaces that have Tier 2 "Read full interpretation" buttons
+const TIER2_PALACES = ['\u592b\u59bb', '\u8d22\u5e1b', '\u5b98\u7984'];
+
+let currentAstrolabe = null;
+let currentReading = null;
+let lastHourUnknown = false;
+
+// ====================================================================
+//  Navigation & helpers
+// ====================================================================
+function showPage(page) {
+    document.getElementById('page-home').style.display = page === 'home' ? 'block' : 'none';
+    document.getElementById('page-about').classList.toggle('active', page === 'about');
+    if (page === 'about') renderLegend();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('active');
+    setTimeout(() => t.classList.remove('active'), 3000);
+}
+function showLoading(text) { document.getElementById('loading-text').textContent = text || 'Reading\u2026'; document.getElementById('loading').classList.add('active'); }
+function hideLoading() { document.getElementById('loading').classList.remove('active'); }
+function translateStar(name) { return STAR_MAP[name] || { en: name, title: '' }; }
+function translateBrightness(b) {
+    const map = {'\u5e99':'Temple','\u65fa':'Prosperous','\u5f97':'Gained','\u5229':'Favorable','\u5e73':'Neutral','\u4e0d':'Weak','\u9677':'Fallen'};
+    return map[b] || b || '';
+}
+function translateChineseDate(s) {
+    if (!s) return '';
+    const m = {'\u7532':'Jia','\u4e59':'Yi','\u4e19':'Bing','\u4e01':'Ding','\u620a':'Wu','\u5df1':'Ji','\u5e9a':'Geng','\u8f9b':'Xin','\u58ec':'Ren','\u7678':'Gui','\u5b50':'Zi','\u4e11':'Chou','\u5bc5':'Yin','\u536f':'Mao','\u8fb0':'Chen','\u5df3':'Si','\u5348':'Wu','\u672a':'Wei','\u7533':'Shen','\u9149':'You','\u620c':'Xu','\u4ea5':'Hai','\u5e74':'Yr','\u6708':'Mo','\u65e5':'Dy','\u65f6':'Hr'};
+    let r = ''; for (const c of s) r += m[c] || c; return r;
+}
+function translateFiveElements(fe) {
+    if (!fe) return '';
+    for (const [cn, en] of Object.entries(FIVE_ELEMENTS_EN)) { if (fe.includes(cn)) return en; }
+    return fe;
+}
+function hourToIndex(H) { return (H === 23) ? 0 : Math.floor((H + 1) / 2); }
+
+// ====================================================================
+//  Generate
+// ====================================================================
+function generateChart() {
+    const year = document.getElementById('birth-year').value;
+    const month = document.getElementById('birth-month').value;
+    const day = document.getElementById('birth-day').value;
+    const hourRaw = document.getElementById('birth-hour').value;
+    const gender = document.getElementById('gender').value;
+    const calType = document.getElementById('calendar-type').value;
+
+    if (!year || !month || !day || hourRaw === '' || !gender) {
+        showToast('Please fill in every field to reveal your type.'); return;
+    }
+
+    let hourIndex; lastHourUnknown = false;
+    if (hourRaw === 'unknown') { hourIndex = 6; lastHourUnknown = true; }
+    else { hourIndex = hourToIndex(parseInt(hourRaw)); }
+
+    showLoading('Reading your stars\u2026');
+    setTimeout(() => {
+        try {
+            const dateStr = `${year}-${month}-${day}`;
+            const genderStr = gender === 'male' ? '\u7537' : '\u5973';
+            let astrolabe;
+            if (calType === 'solar') {
+                astrolabe = iztro.astro.bySolar(dateStr, hourIndex, genderStr, true, 'zh-CN');
+            } else {
+                astrolabe = iztro.astro.byLunar(dateStr, hourIndex, genderStr, false, true, 'zh-CN');
+            }
+            currentAstrolabe = astrolabe;
+            renderResults(astrolabe);
+            hideLoading();
+            document.getElementById('results').classList.add('active');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        } catch (e) {
+            hideLoading();
+            showToast('Something went wrong: ' + e.message);
+            console.error(e);
+        }
+    }, 450);
+}
+
+function pickHeadliner(majorStars) {
+    if (!majorStars) return null;
+    const names = majorStars.map(s => s.name).filter(n => READINGS[n]);
+    if (names.length === 0) return null;
+    names.sort((a, b) => ARCHETYPE_PRIORITY.indexOf(a) - ARCHETYPE_PRIORITY.indexOf(b));
+    return names[0];
+}
+
+function determineArchetype(data) {
+    const life = data.palaces.find(p => p.name === '\u547d\u5bab');
+    let star = life ? pickHeadliner(life.majorStars) : null;
+    let borrowed = false;
+    if (!star) {
+        const mig = data.palaces.find(p => p.name === '\u8fc1\u79fb');
+        star = mig ? pickHeadliner(mig.majorStars) : null;
+        borrowed = !!star;
+    }
+    if (!star) {
+        for (const p of data.palaces) { const h = pickHeadliner(p.majorStars); if (h) { star = h; borrowed = true; break; } }
+    }
+    if (!star) star = '\u7d2b\u5fae';
+    return { star, reading: READINGS[star], borrowed };
+}
+
+function renderResults(data) {
+    const { star, reading, borrowed } = determineArchetype(data);
+    currentReading = reading;
+
+    document.getElementById('arch-name').textContent = reading.name;
+    document.getElementById('arch-essence').textContent = reading.essence;
+    document.getElementById('arch-tag').textContent = star + ' \u00b7 ' + reading.pinyin;
+
+    const caveat = document.getElementById('time-caveat');
+    let msg = '';
+    if (lastHourUnknown) msg = "We estimated your birth time as midday, so your core type may shift if you find your exact birth hour. Everything else still applies.";
+    else if (borrowed) msg = "Your Life Palace has no major star, so we read your type from its complementary palace \u2014 a standard approach in this system.";
+    caveat.textContent = msg;
+    caveat.style.display = msg ? 'block' : 'none';
+
+    document.getElementById('snapshot-text').textContent = reading.snapshot;
+    document.getElementById('snapshot-chips').innerHTML = reading.chips.map(c => `<span class="chip">${c}</span>`).join('');
+    document.getElementById('strengths-list').innerHTML = reading.strengths.map(s => `<li>${s}</li>`).join('');
+    document.getElementById('watchouts-list').innerHTML = reading.watchouts.map(s => `<li>${s}</li>`).join('');
+
+    document.getElementById('acc-personality').innerHTML = `<p>${reading.personality}</p>`;
+    document.getElementById('acc-career').innerHTML = `<p>${reading.career}</p>`;
+    document.getElementById('acc-love').innerHTML = `<p>${reading.love}</p>`;
+    document.getElementById('acc-money').innerHTML = `<p>${reading.money}</p>`;
+
+    // Render Tier 1 & 2 palace overview
+    renderPalaceOverview(data);
+
+    // Render advanced chart section
+    renderAdvanced(data);
+    renderChartSVG(data);
+
+    // Reset AI results when new chart is generated
+    document.getElementById('ai-results').classList.remove('active');
+    document.getElementById('ai-results').innerHTML = '';
+}
+
+// ====================================================================
+//  TIER 1 & 2: 12 Palace Overview
+// ====================================================================
+function getPalaceOneliner(palaceName, starName) {
+    const starInfo = STAR_MAP[starName];
+    if (!starInfo) return '';
+
+    // For Life palace, use essence
+    if (palaceName === '\u547d\u5bab') {
+        return `${starInfo.en} \u2014 ${starInfo.title}. Defines your core self and life direction.`;
+    }
+
+    // Get domain-specific quality
+    const domainQualities = DOMAIN_SPECIFIC_QUALITIES[palaceName];
+    const quality = domainQualities ? (domainQualities[starName] || '') : '';
+
+    const palaceInfo = PALACE_MAP[palaceName] || { en: palaceName, subtitle: '' };
+
+    if (quality) {
+        return `${palaceInfo.en}: ${starInfo.en} \u2014 ${starInfo.title}. ${quality}`;
+    }
+    // Generic fallback
+    const reading = READINGS[starName];
+    const essence = reading ? reading.essence : starInfo.title;
+    return `${palaceInfo.en}: ${starInfo.en} \u2014 ${starInfo.title}. ${essence}`;
+}
+
+function renderPalaceOverview(data) {
+    const container = document.getElementById('palace-accordion-list');
+    let html = '';
+
+    // Find each palace by name (some names may appear as alternatives)
+    PALACE_ORDER.forEach((palaceName, idx) => {
+        let palace = data.palaces.find(p => p.name === palaceName);
+        // Handle alternative names
+        if (!palace && palaceName === '\u4ea4\u53cb') {
+            palace = data.palaces.find(p => p.name === '\u4f6e\u5f79' || p.name === '\u4ec6\u5f79');
+        }
+        if (!palace) return;
+
+        const palaceInfo = PALACE_MAP[palace.name] || { en: palace.name, subtitle: '' };
+        const icon = PALACE_ICONS[palaceName] || '&#9734;';
+        const headliner = pickHeadliner(palace.majorStars);
+
+        let oneliner = '';
+        let starDisplay = '';
+        let noStar = false;
+        let borrowedStar = null;
+
+        if (headliner) {
+            const sInfo = STAR_MAP[headliner];
+            oneliner = getPalaceOneliner(palace.name, headliner);
+            starDisplay = `<span class="palace-star-tag">${sInfo.en}</span> \u2014 ${sInfo.title}`;
+        } else {
+            // No major star — find complementary palace
+            noStar = true;
+            const palaceIdx = PALACE_ORDER.indexOf(palace.name);
+            const compIdx = (palaceIdx + 6) % 12;
+            const compName = PALACE_ORDER[compIdx];
+            const compPalace = data.palaces.find(p => p.name === compName);
+            if (compPalace) {
+                const compHeadliner = pickHeadliner(compPalace.majorStars);
+                if (compHeadliner) {
+                    borrowedStar = compHeadliner;
+                    const sInfo = STAR_MAP[compHeadliner];
+                    starDisplay = `<span class="palace-star-tag">${sInfo.en}</span> (borrowed from ${PALACE_MAP[compName] ? PALACE_MAP[compName].en : compName})`;
+                    oneliner = `${palaceInfo.en}: Borrows ${sInfo.en} from the ${PALACE_MAP[compName] ? PALACE_MAP[compName].en : compName} palace. ${getPalaceOneliner(palace.name, compHeadliner)}`;
+                }
+            }
+            if (!oneliner) {
+                oneliner = `${palaceInfo.en}: No major star in this palace. This palace borrows from its complementary palace.`;
+                starDisplay = 'No major star';
+            }
+        }
+
+        const isTier2 = TIER2_PALACES.includes(palace.name);
+        const tier2Star = isTier2 ? (headliner || borrowedStar) : null;
+        const hasTier2 = isTier2 && tier2Star && TIER2_PARAGRAPHS[palace.name] && TIER2_PARAGRAPHS[palace.name][tier2Star];
+
+        html += `<div class="palace-acc-item">`;
+        html += `<div class="palace-acc-head" onclick="togglePalaceAcc(this)">`;
+        html += `<div class="palace-acc-left">`;
+        html += `<div class="palace-acc-icon">${icon}</div>`;
+        html += `<div class="palace-acc-label">`;
+        html += `<div class="palace-acc-name">${palaceInfo.en} <span style="color:var(--text-muted);font-size:0.78rem;font-weight:400;">${palaceInfo.subtitle}</span></div>`;
+        html += `<div class="palace-acc-oneliner">${oneliner}</div>`;
+        html += `</div></div>`;
+        html += `<div class="palace-acc-right"><span class="palace-acc-chev">&#9662;</span></div>`;
+        html += `</div>`;
+
+        // Expanded body
+        html += `<div class="palace-acc-body" id="palace-acc-body-${idx}">`;
+        html += `<div class="palace-detail-text">`;
+        html += `<p><strong>Star:</strong> ${starDisplay}</p>`;
+
+        if (headliner) {
+            const reading = READINGS[headliner];
+            if (reading) {
+                html += `<p style="margin-top:0.5rem;"><strong>${STAR_MAP[headliner].en} (${STAR_MAP[headliner].title}):</strong> ${reading.essence}</p>`;
+            }
+        }
+
+        // Show minor stars if any
+        if (palace.minorStars.length > 0) {
+            html += `<p style="margin-top:0.5rem;"><strong>Supporting stars:</strong> `;
+            html += palace.minorStars.map(s => {
+                const info = STAR_MAP[s.name] || { en: s.name };
+                return `<span class="star-tag ${s.type === 'tough' ? 'tough' : 'minor'}" style="margin:2px;">${info.en}</span>`;
+            }).join('');
+            html += `</p>`;
+        }
+
+        if (noStar && borrowedStar) {
+            html += `<p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-muted);font-style:italic;">This palace has no major star of its own and borrows the energy of ${STAR_MAP[borrowedStar].en} from the complementary palace.</p>`;
+        }
+
+        html += `</div>`;
+
+        // Tier 2 "Read full interpretation" button
+        if (hasTier2) {
+            const fullParagraph = TIER2_PARAGRAPHS[palace.name][tier2Star];
+            html += `<button class="btn-read-more" onclick="toggleTier2(event, 'tier2-${idx}')">Read full interpretation &#9662;</button>`;
+            html += `<div class="tier2-full" id="tier2-${idx}"><p>${fullParagraph}</p></div>`;
+        }
+
+        html += `</div>`; // end palace-acc-body
+        html += `</div>`; // end palace-acc-item
+    });
+
+    container.innerHTML = html;
+}
+
+function togglePalaceAcc(el) {
+    const body = el.nextElementSibling;
+    const open = body.classList.contains('open');
+    body.classList.toggle('open');
+    const chev = el.querySelector('.palace-acc-chev');
+    chev.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+function toggleTier2(event, id) {
+    event.stopPropagation();
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+    const btn = event.target.closest('.btn-read-more');
+    if (btn) {
+        const isOpen = el.classList.contains('open');
+        btn.innerHTML = isOpen ? 'Collapse interpretation &#9652;' : 'Read full interpretation &#9662;';
+    }
+}
+
+// ====================================================================
+//  TIER 3: AI Deep Reading
+// ====================================================================
+function buildChartDataText(data) {
+    let text = "Full Ziwei Dou Shu chart data:\n\n";
+    data.palaces.forEach(p => {
+        const info = PALACE_MAP[p.name] || { en: p.name, subtitle: '' };
+        const stemEn = STEM_EN[p.heavenlyStem] || p.heavenlyStem;
+        const branchEn = BRANCH_EN[p.earthlyBranch] || p.earthlyBranch;
+        text += `${info.en} Palace (${info.subtitle}) - ${stemEn} ${branchEn}`;
+        if (p.isBodyPalace) text += " [Body Palace]";
+        text += "\n";
+        p.majorStars.forEach(s => {
+            const si = STAR_MAP[s.name] || { en: s.name, title: '' };
+            const b = translateBrightness(s.brightness);
+            text += `  Major: ${si.en} (${si.title}) - Brightness: ${b}\n`;
+        });
+        p.minorStars.forEach(s => {
+            const si = STAR_MAP[s.name] || { en: s.name, title: '' };
+            const cls = s.type === 'tough' ? 'Tough' : 'Minor';
+            text += `  ${cls}: ${si.en} (${si.title})\n`;
+        });
+        text += "\n";
+    });
+    let zodiacEn = data.zodiac;
+    for (const [cn, en] of Object.entries(ZODIAC_EN)) { if (data.zodiac.includes(cn)) { zodiacEn = en; break; } }
+    let signEn = data.sign;
+    for (const [cn, en] of Object.entries(SIGN_EN)) { if (data.sign.includes(cn)) { signEn = en; break; } }
+    text += `Zodiac: ${zodiacEn}\nSun Sign: ${signEn}\nElement: ${translateFiveElements(data.fiveElementsClass)}\nSolar Date: ${data.solarDate}\n`;
+    return text;
+}
+
+async function generateAIReading() {
+    const apiKey = document.getElementById('ai-api-key').value.trim();
+    if (!apiKey) {
+        showToast('Please enter your OpenAI API key.');
+        return;
+    }
+    if (!currentAstrolabe) {
+        showToast('Please generate your chart first.');
+        return;
+    }
+
+    const btn = document.getElementById('btn-ai-generate');
+    btn.disabled = true;
+    btn.innerHTML = '&#8987; Generating AI reading...';
+    document.getElementById('ai-loading-bar').classList.add('active');
+
+    const chartData = buildChartDataText(currentAstrolabe);
+
+    const systemPrompt = `You are an expert Ziwei Dou Shu (Purple Star Astrology) interpreter writing for an English-speaking audience. You are given complete chart data for all 12 palaces with their stars, brightness levels, heavenly stems, and earthly branches.
+
+For EACH of the 12 palaces, write a personalized 3-5 sentence interpretation that:
+1. Identifies the major star(s) in the palace and what they signify
+2. Applies the star's energy specifically to the life domain of that palace
+3. Notes any significant minor stars (especially tough stars like Qingyang, Tuoluo, Huoxing, Lingxing, Dikong, Dijie)
+4. Provides actionable insight or gentle advice
+
+Be specific, warm, and insightful. Avoid generic astrology fluff. Reference the actual stars in the chart data. Format each palace section clearly with the palace name as a header. Use English throughout.`;
+
+    const userPrompt = `Here is the chart data:\n\n${chartData}\n\nPlease provide a deep, palace-by-palace interpretation for all 12 palaces.`;
+
+    const resultsContainer = document.getElementById('ai-results');
+    resultsContainer.classList.add('active');
+
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt }
+                ],
+                stream: true,
+                temperature: 0.7,
+                max_tokens: 4000
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error?.message || `API returned status ${response.status}`);
+        }
+
+        // Streaming response
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let fullContent = '';
+        let buffer = '';
+
+        // Initialize palace sections
+        const palaces = [];
+        PALACE_ORDER.forEach((name, idx) => {
+            const info = PALACE_MAP[name] || { en: name, subtitle: '' };
+            palaces.push({ name: info.en, subtitle: info.subtitle, id: `ai-palace-${idx}` });
+        });
+
+        let palaceHtml = palaces.map(p =>
+            `<div class="ai-palace-block">
+                <div class="ai-palace-head" onclick="toggleAIPalace(this)">
+                    ${p.name} <span style="font-weight:400;font-size:0.82rem;color:var(--text-muted);">${p.subtitle}</span>
+                    <span class="acc-chev">&#9662;</span>
+                </div>
+                <div class="ai-palace-body" id="${p.id}"></div>
+            </div>`
+        ).join('');
+
+        resultsContainer.innerHTML = `<h4 style="color:var(--gold);font-size:0.82rem;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:0.8rem;">AI Palace-by-Palace Reading</h4>` + palaceHtml;
+
+        let currentPalaceIdx = 0;
+        let currentText = '';
+
+        function appendToPalace(idx, text) {
+            const el = document.getElementById(`ai-palace-${idx}`);
+            if (el) {
+                // Auto-open the current palace being streamed
+                if (!el.classList.contains('open')) {
+                    el.classList.add('open');
+                    el.previousElementSibling.querySelector('.acc-chev').style.transform = 'rotate(180deg)';
+                }
+                el.innerHTML = text + '<span class="ai-typing-cursor"></span>';
+            }
+        }
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed || !trimmed.startsWith('data: ')) continue;
+                const data = trimmed.slice(6);
+                if (data === '[DONE]') continue;
+
+                try {
+                    const parsed = JSON.parse(data);
+                    const delta = parsed.choices?.[0]?.delta?.content;
+                    if (delta) {
+                        fullContent += delta;
+
+                        // Simple heuristic: split content into palace sections
+                        // Match palace names at start of lines
+                        const palaceNameRegex = /^(Life|Siblings|Spouse|Children|Wealth|Health|Travel|Friends|Career|Property|Fortune|Parents)\s*(Palace)?[:\s]/i;
+
+                        const parts = fullContent.split(/(?=(?:^|\n)(?:Life|Siblings|Spouse|Children|Wealth|Health|Travel|Friends|Career|Property|Fortune|Parents)\s*(?:Palace)?[:\s])/im);
+
+                        if (parts.length > 1) {
+                            // Re-parse
+                            let match;
+                            const palaceNames = ['Life','Siblings','Spouse','Children','Wealth','Health','Travel','Friends','Career','Property','Fortune','Parents'];
+                            let tempContent = fullContent;
+
+                            for (let i = 0; i < palaces.length; i++) {
+                                const regex = new RegExp(`(?:^|\\n)(${palaces[i].name}(?:\\s+Palace)?)[:\\s]*`, 'i');
+                                const idx = tempContent.search(regex);
+                                if (idx > 0) {
+                                    // Assign everything before this match to the previous palace
+                                    if (i > 0) {
+                                        const prevText = tempContent.substring(0, idx).trim();
+                                        appendToPalace(i - 1, formatAIText(prevText));
+                                    }
+                                    tempContent = tempContent.substring(idx);
+                                    // Remove the header
+                                    tempContent = tempContent.replace(regex, '');
+                                }
+                            }
+                            // Remaining text goes to last matched palace
+                            if (tempContent.trim()) {
+                                appendToPalace(palaces.length - 1, formatAIText(tempContent.trim()));
+                            }
+                        } else {
+                            // Single block - put in first palace
+                            appendToPalace(0, formatAIText(fullContent));
+                        }
+                    }
+                } catch (e) {
+                    // Ignore JSON parse errors in streaming
+                }
+            }
+        }
+
+        // Final cleanup - remove typing cursors and finalize
+        document.querySelectorAll('.ai-typing-cursor').forEach(el => el.remove());
+
+        // If content was received but not split well, put it all in one block
+        if (fullContent && resultsContainer.querySelectorAll('.ai-palace-body').every(el => !el.textContent.trim())) {
+            const el = document.getElementById('ai-palace-0');
+            if (el) {
+                el.innerHTML = formatAIText(fullContent);
+                el.classList.add('open');
+                el.previousElementSibling.querySelector('.acc-chev').style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Final pass: properly distribute the full content across palaces
+        finalizeAIPalaces(fullContent);
+
+    } catch (e) {
+        showToast('AI reading failed: ' + e.message);
+        console.error(e);
+        resultsContainer.innerHTML += `<p style="color:#f87171;margin-top:1rem;font-size:0.88rem;">Error: ${e.message}</p>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '&#10024; Generate AI reading for all 12 palaces';
+        document.getElementById('ai-loading-bar').classList.remove('active');
+    }
+}
+
+function formatAIText(text) {
+    // Convert markdown-like formatting to HTML
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>')
+        .replace(/^/, '<p>')
+        .replace(/$/, '</p>');
+}
+
+function finalizeAIPalaces(fullContent) {
+    const palaceNames = ['Life','Siblings','Spouse','Children','Wealth','Health','Travel','Friends','Career','Property','Fortune','Parents'];
+
+    // Split content by palace headers
+    const sections = [];
+    const regex = /(?:^|\n)\s*(Life|Siblings|Spouse|Children|Wealth|Health|Travel|Friends|Career|Property|Fortune|Parents)\s*(?:Palace)?\s*[:\-\u2014]?\s*/gi;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(fullContent)) !== null) {
+        if (match.index > lastIndex || sections.length > 0) {
+            sections.push({
+                name: match[1],
+                content: ''
+            });
+        }
+        lastIndex = regex.lastIndex;
+    }
+
+    if (sections.length === 0) {
+        // No headers found — put everything in first palace
+        const el = document.getElementById('ai-palace-0');
+        if (el) {
+            el.innerHTML = formatAIText(fullContent);
+            el.classList.add('open');
+            el.previousElementSibling.querySelector('.acc-chev').style.transform = 'rotate(180deg)';
+        }
+        return;
+    }
+
+    // If we found headers, do a proper split
+    const splitRegex = /(?=(?:^|\n)\s*(?:Life|Siblings|Spouse|Children|Wealth|Health|Travel|Friends|Career|Property|Fortune|Parents)\s*(?:Palace)?\s*[:\-\u2014]?\s*)/gi;
+    const parts = fullContent.split(splitRegex).filter(p => p.trim());
+
+    for (let i = 0; i < parts.length; i++) {
+        let text = parts[i].trim();
+        // Remove leading palace header
+        text = text.replace(/^(Life|Siblings|Spouse|Children|Wealth|Health|Travel|Friends|Career|Property|Fortune|Parents)\s*(?:Palace)?\s*[:\-\u2014]?\s*/i, '').trim();
+
+        const palaceIdx = palaceNames.findIndex(n => text.toLowerCase().includes(n.toLowerCase()) || (i < palaceNames.length));
+        const targetIdx = Math.min(i, palaceNames.length - 1);
+        const el = document.getElementById(`ai-palace-${targetIdx}`);
+        if (el && text) {
+            el.innerHTML = formatAIText(text);
+        }
+    }
+
+    // Open the first palace by default
+    const first = document.getElementById('ai-palace-0');
+    if (first && first.textContent.trim()) {
+        first.classList.add('open');
+        first.previousElementSibling.querySelector('.acc-chev').style.transform = 'rotate(180deg)';
+    }
+}
+
+function toggleAIPalace(el) {
+    const body = el.nextElementSibling;
+    const open = body.classList.contains('open');
+    body.classList.toggle('open');
+    el.querySelector('.acc-chev').style.transform = open ? '' : 'rotate(180deg)';
+}
+
+// ====================================================================
+//  Advanced chart helpers
+// ====================================================================
+function renderAdvanced(data) {
+    let zodiacEn = data.zodiac; for (const [cn, en] of Object.entries(ZODIAC_EN)) { if (data.zodiac.includes(cn)) { zodiacEn = en; break; } }
+    let signEn = data.sign; for (const [cn, en] of Object.entries(SIGN_EN)) { if (data.sign.includes(cn)) { signEn = en; break; } }
+    const fe = translateFiveElements(data.fiveElementsClass);
+    const soul = translateStar(data.soul), body = translateStar(data.body);
+
+    document.getElementById('basic-info').innerHTML = `
+        <div class="info-item"><span class="label">Date</span><span class="value">${data.solarDate}</span></div>
+        <div class="info-item"><span class="label">Zodiac</span><span class="value">${zodiacEn}</span></div>
+        <div class="info-item"><span class="label">Sun sign</span><span class="value">${signEn}</span></div>
+        <div class="info-item"><span class="label">Element</span><span class="value">${fe}</span></div>
+        <div class="info-item"><span class="label">Soul star</span><span class="value">${soul.en}</span></div>
+        <div class="info-item"><span class="label">Body star</span><span class="value">${body.en}</span></div>`;
+
+    const life = data.palaces.find(p => p.name === '\u547d\u5bab');
+    document.getElementById('life-palace-stars').innerHTML = life ? renderStarTags(life) : '';
+
+    const fourteen = ['\u7d2b\u5fae','\u5929\u673a','\u592a\u9633','\u6b66\u66f2','\u5929\u540c','\u5ec9\u8d1e','\u5929\u5e9c','\u592a\u9634','\u8d2a\u72fc','\u5de8\u95e8','\u5929\u76f8','\u5929\u6881','\u4e03\u6740','\u7834\u519b'];
+    let html = '';
+    fourteen.forEach(name => {
+        data.palaces.forEach(p => {
+            const f = p.majorStars.find(s => s.name === name);
+            if (f) { const info = translateStar(name); const b = translateBrightness(f.brightness); html += `<span class="star-tag major" title="${info.title}">${info.en}${b ? ' ['+b+']' : ''}</span>`; }
+        });
+    });
+    document.getElementById('all-major-stars').innerHTML = html;
+}
+
+function renderStarTags(palace) {
+    let html = '';
+    palace.majorStars.forEach(s => { const info = translateStar(s.name); const b = translateBrightness(s.brightness); html += `<span class="star-tag major">${info.en}${b ? ' ['+b+']' : ''}</span>`; });
+    palace.minorStars.forEach(s => { const info = translateStar(s.name); const cls = (s.type === 'tough') ? 'tough' : 'minor'; html += `<span class="star-tag ${cls}">${info.en}</span>`; });
+    return html || '<span style="color:var(--text-muted);font-size:0.85rem;">No major stars (read from the complementary palace)</span>';
+}
+
+function renderChartSVG(data) {
+    const svg = document.getElementById('chart-svg');
+    const cellW = 140, cellH = 140;
+    const palaceByBranch = {};
+    data.palaces.forEach(p => { palaceByBranch[p.earthlyBranch] = p; });
+    const gridPos = {
+        '\u5bc5':{r:0,c:0},'\u536f':{r:0,c:1},'\u8fb0':{r:0,c:2},'\u5df3':{r:0,c:3},
+        '\u5348':{r:1,c:3},'\u672a':{r:2,c:3},'\u7533':{r:3,c:3},'\u9149':{r:3,c:2},
+        '\u620c':{r:3,c:1},'\u4ea5':{r:3,c:0},'\u5b50':{r:2,c:0},'\u4e11':{r:1,c:0}
+    };
+    let s = '';
+    let lifeIdx = -1;
+    for (let i = 0; i < 12; i++) { const p = palaceByBranch[BRANCH_ORDER[i]]; if (p && p.name === '\u547d\u5bab') { lifeIdx = i; break; } }
+    function center(idx) { const b = BRANCH_ORDER[idx]; const pos = gridPos[b]; return { x: pos.c*cellW + cellW/2, y: pos.r*cellH + cellH/2 }; }
+    if (lifeIdx >= 0) {
+        const sf = [lifeIdx, (lifeIdx+4)%12, (lifeIdx+8)%12].map(center);
+        const sz = center((lifeIdx+6)%12);
+        s += `<line x1="${sf[0].x}" y1="${sf[0].y}" x2="${sf[1].x}" y2="${sf[1].y}" stroke="rgba(224,180,80,0.32)" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+        s += `<line x1="${sf[1].x}" y1="${sf[1].y}" x2="${sf[2].x}" y2="${sf[2].y}" stroke="rgba(224,180,80,0.32)" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+        s += `<line x1="${sf[2].x}" y1="${sf[2].y}" x2="${sf[0].x}" y2="${sf[0].y}" stroke="rgba(224,180,80,0.32)" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+        s += `<line x1="${sf[0].x}" y1="${sf[0].y}" x2="${sz.x}" y2="${sz.y}" stroke="rgba(167,107,216,0.4)" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+        [sf[0],sf[1],sf[2],sz].forEach((pt,i) => { const c = i<3?'rgba(224,180,80,0.6)':'rgba(167,107,216,0.6)'; const r=4; s += `<polygon points="${pt.x},${pt.y-r} ${pt.x+r},${pt.y} ${pt.x},${pt.y+r} ${pt.x-r},${pt.y}" fill="${c}" opacity="0.7"/>`; });
+    }
+    BRANCH_ORDER.forEach((branch, idx) => {
+        const palace = palaceByBranch[branch]; if (!palace) return;
+        const pos = gridPos[branch]; const x = pos.c*cellW, y = pos.r*cellH;
+        const info = PALACE_MAP[palace.name] || { en: palace.name, subtitle: '' };
+        s += `<g class="palace-cell" onclick="showPalaceDetail(${idx})">`;
+        s += `<rect x="${x}" y="${y}" width="${cellW}" height="${cellH}" fill="rgba(21,8,38,0.4)" stroke="rgba(224,180,80,0.22)" stroke-width="1" rx="4"/>`;
+        s += `<text x="${x+cellW/2}" y="${y+16}" text-anchor="middle" class="chart-palace-name">${info.en}</text>`;
+        s += `<text x="${x+cellW/2}" y="${y+28}" text-anchor="middle" class="chart-palace-sub">${info.subtitle}</text>`;
+        const stemEn = STEM_EN[palace.heavenlyStem] || palace.heavenlyStem;
+        s += `<text x="${x+cellW-8}" y="${y+16}" text-anchor="end" class="chart-stem">${stemEn}</text>`;
+        if (palace.isBodyPalace) s += `<text x="${x+8}" y="${y+cellH-8}" class="chart-body-marker">[Body]</text>`;
+        let starY = y + 46;
+        palace.majorStars.forEach(star => { const si = translateStar(star.name); const b = translateBrightness(star.brightness); s += `<text x="${x+cellW/2}" y="${starY}" text-anchor="middle" class="chart-star-major">${si.en}${b?' '+b:''}</text>`; starY += 14; });
+        palace.minorStars.slice(0,3).forEach(star => { const si = translateStar(star.name); const cls = (star.type==='tough')?'chart-star-tough':'chart-star-minor'; s += `<text x="${x+cellW/2}" y="${starY}" text-anchor="middle" class="${cls}">${si.en}</text>`; starY += 12; });
+        if (palace.minorStars.length > 3) s += `<text x="${x+cellW/2}" y="${starY}" text-anchor="middle" class="chart-star-minor">+${palace.minorStars.length-3} more</text>`;
+        s += `</g>`;
+    });
+    const cx = cellW, cy = cellH, cw = cellW*2, ch = cellH*2;
+    s += `<rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" fill="rgba(21,8,38,0.6)" stroke="rgba(224,180,80,0.4)" stroke-width="1.5" rx="4"/>`;
+    let zodiacEn = data.zodiac; for (const [cn, en] of Object.entries(ZODIAC_EN)) { if (data.zodiac.includes(cn)) { zodiacEn = en; break; } }
+    let signEn = data.sign; for (const [cn, en] of Object.entries(SIGN_EN)) { if (data.sign.includes(cn)) { signEn = en; break; } }
+    const fe = translateFiveElements(data.fiveElementsClass);
+    s += `<text x="${cx+cw/2}" y="${cy+34}" text-anchor="middle" class="chart-center-title">${currentReading ? currentReading.name : 'Your chart'}</text>`;
+    s += `<text x="${cx+cw/2}" y="${cy+56}" text-anchor="middle" class="chart-center-text">${data.solarDate}</text>`;
+    s += `<text x="${cx+cw/2}" y="${cy+76}" text-anchor="middle" class="chart-center-text">${zodiacEn} \u00b7 ${signEn}</text>`;
+    s += `<text x="${cx+cw/2}" y="${cy+96}" text-anchor="middle" class="chart-center-text">${fe} element</text>`;
+    svg.innerHTML = s;
+}
+
+function showPalaceDetail(idx) {
+    if (!currentAstrolabe) return;
+    const branch = BRANCH_ORDER[idx];
+    const palace = currentAstrolabe.palaces.find(p => p.earthlyBranch === branch);
+    if (!palace) return;
+    const info = PALACE_MAP[palace.name] || { en: palace.name, subtitle: '' };
+    const stemEn = STEM_EN[palace.heavenlyStem] || palace.heavenlyStem;
+    const branchEn = BRANCH_EN[palace.earthlyBranch] || palace.earthlyBranch;
+    let html = `<button class="palace-detail-close" onclick="closePalaceDetail()">&times;</button>`;
+    html += `<h3>${info.en} Palace</h3>`;
+    html += `<p style="color:var(--text-muted);margin-bottom:1rem;">${info.subtitle} \u00b7 ${stemEn} ${branchEn}</p>`;
+    if (palace.isBodyPalace) html += `<p style="color:var(--purple-glow);margin-bottom:1rem;font-size:0.9rem;">&#9733; Body Palace</p>`;
+    if (palace.majorStars.length > 0) {
+        html += `<h4 style="color:var(--gold-light);margin:0.8rem 0 0.5rem;">Major stars</h4><div class="star-list" style="margin-bottom:0.6rem;">`;
+        palace.majorStars.forEach(s2 => { const i2 = translateStar(s2.name); const b = translateBrightness(s2.brightness); html += `<span class="star-tag major">${i2.en} \u00b7 ${i2.title}${b?' ['+b+']':''}</span>`; });
+        html += `</div>`;
+    }
+    if (palace.minorStars.length > 0) {
+        html += `<h4 style="color:#c4b5fd;margin:0.9rem 0 0.5rem;">Minor stars</h4><div class="star-list">`;
+        palace.minorStars.forEach(s2 => { const i2 = translateStar(s2.name); const cls = (s2.type==='tough')?'tough':'minor'; html += `<span class="star-tag ${cls}">${i2.en}</span>`; });
+        html += `</div>`;
+    }
+    document.getElementById('palace-detail-content').innerHTML = html;
+    document.getElementById('palace-detail').classList.add('active');
+}
+function closePalaceDetail() { document.getElementById('palace-detail').classList.remove('active'); }
+document.getElementById('palace-detail').addEventListener('click', function(e) { if (e.target === this) closePalaceDetail(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closePalaceDetail(); });
+
+// ====================================================================
+//  Accordion + advanced toggles + share + legend
+// ====================================================================
+function toggleAcc(id, el) {
+    const body = document.getElementById(id);
+    const open = body.style.display === 'block';
+    body.style.display = open ? 'none' : 'block';
+    el.querySelector('.acc-chev').style.transform = open ? '' : 'rotate(180deg)';
+}
+function toggleAdvanced(el) {
+    const body = document.getElementById('adv-body');
+    const open = body.classList.toggle('open');
+    el.querySelector('.adv-chev').style.transform = open ? 'rotate(90deg)' : '';
+}
+function shareType() {
+    if (!currentReading) return;
+    const text = `My Purple Star type is ${currentReading.name} (${currentReading.pinyin}). What's yours?`;
+    const url = location.href.split('#')[0];
+    if (navigator.share) {
+        navigator.share({ title: 'Purple Star', text, url }).catch(() => {});
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text + ' ' + url).then(() => showToast('Copied \u2014 paste it anywhere to share.')).catch(() => showToast(text));
+    } else {
+        showToast(text);
+    }
+}
+function renderLegend() {
+    const order = ['\u7d2b\u5fae','\u5929\u673a','\u592a\u9633','\u6b66\u66f2','\u5929\u540c','\u5ec9\u8d1e','\u5929\u5e9c','\u592a\u9634','\u8d2a\u72fc','\u5de8\u95e8','\u5929\u76f8','\u5929\u6881','\u4e03\u6740','\u7834\u519b'];
+    document.getElementById('legend').innerHTML = order.map(cn => {
+        const r = READINGS[cn];
+        return `<div class="legend-item"><div class="legend-name">${r.name}</div><div class="legend-sub">${cn} \u00b7 ${r.pinyin}</div><div class="legend-desc">${r.essence}</div></div>`;
+    }).join('');
+}
+</script>
+</body>
+</html>
