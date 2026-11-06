@@ -3,561 +3,508 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purple Star | Discover Your Type</title>
-    <meta name="description" content="Discover your Purple Star personality type — a free reading based on Ziwei Dou Shu, the ancient Chinese star system. No sign-up, no jargon.">
+    <title>Purple Star</title>
+    <meta name="description" content="A Purple Star reading from your birth date, using Ziwei Dou Shu.">
     <script src="https://cdn.jsdelivr.net/npm/iztro/dist/iztro.min.js"></script>
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --purple-deep: #150826;
-            --purple-dark: #1c0d33;
-            --purple-mid: #2d1b69;
-            --purple-light: #7d4ce8;
-            --purple-glow: #a76bd8;
-            --gold: #e0b450;
-            --gold-light: #f4dc9a;
-            --gold-dark: #b8860b;
-            --text-primary: #f3ecff;
-            --text-secondary: #d6c8ee;
-            --text-muted: #9a89bd;
-            --bg-card: rgba(45, 27, 105, 0.45);
-            --bg-card-solid: #221140;
-            --border: rgba(224, 180, 80, 0.28);
-            --border-soft: rgba(167, 107, 216, 0.22);
-            --radius: 14px;
-            --radius-lg: 22px;
-            --shadow: 0 12px 40px rgba(0,0,0,0.45);
-            --shadow-gold: 0 0 26px rgba(224, 180, 80, 0.28);
+            --bg: #f7f6f3;
+            --ink: #1c1c1c;
+            --muted: #5e5c57;
+            --line: #e4e1da;
+            --paper: #fff;
+            --text-muted: #5e5c57;
         }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { color-scheme: light; }
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--purple-deep);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.65;
-            overflow-x: hidden;
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
         }
-        .bg-pattern {
-            position: fixed; inset: 0; z-index: -1;
-            background:
-                radial-gradient(ellipse at 18% 30%, rgba(125,76,232,0.18) 0%, transparent 55%),
-                radial-gradient(ellipse at 85% 15%, rgba(224,180,80,0.10) 0%, transparent 50%),
-                radial-gradient(ellipse at 55% 90%, rgba(167,107,216,0.12) 0%, transparent 55%);
+        .wrap {
+            max-width: 40rem;
+            margin: 0 auto;
+            padding: 1.75rem 1.25rem 4.5rem;
         }
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-soft);
-            backdrop-filter: blur(20px); background: rgba(21,8,38,0.8);
-            position: sticky; top: 0; z-index: 100;
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--line);
         }
-        .logo { display: flex; align-items: center; gap: 0.7rem; cursor: pointer; }
-        .logo-icon {
-            width: 38px; height: 38px;
-            background: linear-gradient(135deg, var(--gold), var(--purple-light));
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+        header h1 { margin: 0; font-size: 1rem; font-weight: 500; }
+        header a { color: inherit; text-decoration: none; }
+        header nav a { color: var(--muted); }
+        header nav a:hover { color: var(--ink); }
+        .lede {
+            margin: 2.25rem 0 2rem;
+            font-size: 1.125rem;
+            line-height: 1.5;
         }
-        .logo-text { font-size: 1.2rem; font-weight: 700; color: var(--gold-light); letter-spacing: 0.3px; }
-        .logo-sub { font-size: 0.62rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
-        .nav-links { display: flex; gap: 1.4rem; list-style: none; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.88rem; cursor: pointer; transition: color 0.25s; }
-        .nav-links a:hover { color: var(--gold-light); }
-
-        .hero { text-align: center; padding: 3.5rem 1.5rem 2rem; max-width: 720px; margin: 0 auto; }
-        .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.18; }
-        .hero h1 .highlight {
-            background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        form { margin-bottom: 0.5rem; }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.15rem 1.25rem;
         }
-        .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 540px; margin: 0 auto; }
-        .hero .sub-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
-
-        .form-section { max-width: 540px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem; }
-        .form-card {
-            background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
-            padding: 1.75rem; backdrop-filter: blur(12px); box-shadow: var(--shadow);
-            overflow: hidden;
+        .full { grid-column: 1 / -1; }
+        label, .ai-api-group label {
+            display: block;
+            margin-bottom: 0.35rem;
         }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
-        .form-group.full { grid-column: 1 / -1; }
-        .form-group label { font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; }
-        .form-group input, .form-group select {
-            background: rgba(21,8,38,0.85); border: 1px solid var(--border-soft); border-radius: var(--radius);
-            padding: 0.7rem 0.9rem; color: var(--text-primary); font-size: 0.98rem;
-            transition: border-color 0.25s, box-shadow 0.25s; outline: none; width: 100%; min-width: 0;
+        input, select, .ai-api-input {
+            width: 100%;
+            margin: 0;
+            padding: 0.6rem 0.65rem;
+            font: inherit;
+            color: inherit;
+            background: var(--paper);
+            border: 1px solid #d4d1ca;
+            border-radius: 0;
         }
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--gold); box-shadow: 0 0 0 3px rgba(224,180,80,0.14);
+        button, .btn-generate, .btn-share, .btn-ai-generate, .btn-read-more {
+            font: inherit;
+            color: var(--bg);
+            background: var(--ink);
+            border: 1px solid var(--ink);
+            border-radius: 0;
+            padding: 0.7rem 1rem;
+            cursor: pointer;
         }
-        .form-group select option { background: var(--purple-dark); color: var(--text-primary); }
-        .field-note { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.15rem; }
-        .btn-generate {
-            grid-column: 1 / -1; margin-top: 0.6rem; padding: 0.95rem 2rem;
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-            color: var(--purple-deep); border: none; border-radius: var(--radius);
-            font-size: 1.05rem; font-weight: 700; cursor: pointer; letter-spacing: 0.4px;
-            transition: transform 0.2s, box-shadow 0.2s;
+        .btn-generate, .btn-ai-generate, .btn-share { width: 100%; }
+        .btn-share, .btn-read-more, .palace-detail-close {
+            color: var(--ink);
+            background: transparent;
         }
-        .btn-generate:hover { transform: translateY(-2px); box-shadow: var(--shadow-gold); }
-        .btn-generate:active { transform: translateY(0); }
-
-        .loading-overlay {
-            display: none; position: fixed; inset: 0; z-index: 200;
-            background: rgba(21,8,38,0.92); justify-content: center; align-items: center; flex-direction: column; gap: 1.4rem;
-        }
-        .loading-overlay.active { display: flex; }
-        .loading-spinner {
-            width: 56px; height: 56px; border: 3px solid var(--border-soft);
-            border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { color: var(--text-secondary); font-size: 0.98rem; }
-
-        /* ===== Results ===== */
-        .results { display: none; max-width: 620px; margin: 0 auto; padding: 1rem 1.25rem 2rem; }
-        .results.active { display: block; animation: fadeUp 0.5s ease; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-
-        .res-hero {
-            background: var(--bg-card-solid); border: 1.5px solid var(--gold);
-            border-radius: var(--radius-lg); padding: 1.9rem 1.6rem; text-align: center;
-            box-shadow: var(--shadow-gold);
-        }
-        .res-eyebrow { font-size: 0.78rem; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.5rem; }
-        .res-arch {
-            font-size: 2.05rem; font-weight: 800; line-height: 1.15;
-            background: linear-gradient(135deg, var(--gold-light), var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .res-essence { font-size: 1.02rem; color: var(--text-secondary); margin-top: 0.7rem; line-height: 1.55; }
-        .res-tag {
-            display: inline-block; margin-top: 1rem; font-size: 0.8rem; color: var(--gold-light);
-            background: rgba(224,180,80,0.12); border: 1px solid var(--border); padding: 0.3rem 0.9rem; border-radius: 99px;
-        }
-        .time-caveat {
-            display: none; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.9rem;
-            background: rgba(167,107,216,0.1); border-radius: var(--radius); padding: 0.6rem 0.8rem; line-height: 1.5;
-        }
-
-        .res-card {
-            background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: var(--radius-lg);
-            padding: 1.5rem 1.4rem; margin-top: 1rem; backdrop-filter: blur(10px);
-        }
-        .res-card h3 { font-size: 0.82rem; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.85rem; }
-        .snapshot-text { font-size: 1.02rem; color: var(--text-primary); line-height: 1.7; }
-        .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
-        .chip {
-            font-size: 0.85rem; color: var(--gold-light); background: rgba(224,180,80,0.1);
-            border: 1px solid var(--border); padding: 0.35rem 0.85rem; border-radius: 99px;
-        }
-
-        .sw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
-        .sw-col h4 { font-size: 0.9rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem; }
-        .sw-col.good h4 { color: var(--gold-light); }
-        .sw-col.edge h4 { color: var(--purple-glow); }
-        .sw-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-        .sw-col li { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; padding-left: 1rem; position: relative; }
-        .sw-col li::before { content: '\00b7'; position: absolute; left: 0.2rem; color: var(--gold); font-weight: 700; }
-
-        /* Accordion */
-        .acc-item { border-bottom: 1px solid var(--border-soft); }
-        .acc-item:last-child { border-bottom: none; }
-        .acc-head {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 0; cursor: pointer; font-size: 1rem; font-weight: 600; color: var(--text-primary);
-        }
-        .acc-head:hover { color: var(--gold-light); }
-        .acc-head .acc-chev { color: var(--gold); transition: transform 0.25s; font-size: 1.1rem; }
-        .acc-body { display: none; padding: 0 0 1.1rem; font-size: 0.98rem; color: var(--text-secondary); line-height: 1.72; }
-
-        .share-row { margin-top: 1.25rem; }
-        .btn-share {
-            width: 100%; padding: 0.9rem; border-radius: var(--radius);
-            background: linear-gradient(135deg, var(--purple-light), var(--purple-mid));
-            color: #fff; border: 1px solid rgba(125,76,232,0.5); font-size: 1rem; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .btn-share:hover { box-shadow: 0 6px 20px rgba(125,76,232,0.45); transform: translateY(-1px); }
-
-        /* ===== 12 Palace Overview (Tier 1 & Tier 2) ===== */
-        .palace-overview { margin-top: 1rem; }
-        .palace-overview .section-title { font-size: 0.82rem; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.85rem; }
-        .palace-acc-item {
-            border-bottom: 1px solid var(--border-soft);
-            transition: background 0.2s;
-        }
-        .palace-acc-item:last-child { border-bottom: none; }
-        .palace-acc-head {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.85rem 0.9rem; cursor: pointer; border-radius: var(--radius);
-            transition: background 0.2s;
-        }
-        .palace-acc-head:hover { background: rgba(125,76,232,0.08); }
-        .palace-acc-left { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
-        .palace-acc-icon {
-            width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.85rem; flex-shrink: 0;
-            background: rgba(224,180,80,0.12); border: 1px solid var(--border);
-            color: var(--gold-light);
-        }
-        .palace-acc-label { min-width: 0; }
-        .palace-acc-name { font-size: 0.92rem; font-weight: 600; color: var(--text-primary); }
-        .palace-acc-oneliner { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px; }
-        .palace-acc-right { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
-        .palace-acc-chev { color: var(--gold); font-size: 1rem; transition: transform 0.25s; }
-        .palace-acc-body { display: none; padding: 0 0.9rem 1rem; }
-        .palace-acc-body.open { display: block; }
-        .palace-detail-text { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; }
-        .palace-star-tag { font-size: 0.82rem; color: var(--gold-light); font-weight: 600; }
         .btn-read-more {
-            display: inline-flex; align-items: center; gap: 0.35rem;
-            margin-top: 0.7rem; padding: 0.4rem 0.9rem; border-radius: 99px;
-            background: rgba(125,76,232,0.15); border: 1px solid rgba(125,76,232,0.35);
-            color: var(--purple-glow); font-size: 0.82rem; font-weight: 600; cursor: pointer;
-            transition: background 0.2s, box-shadow 0.2s;
+            width: auto;
+            margin-top: 0.85rem;
+            padding: 0.4rem 0.7rem;
+            border-color: var(--line);
         }
-        .btn-read-more:hover { background: rgba(125,76,232,0.25); box-shadow: 0 0 12px rgba(125,76,232,0.2); }
-        .tier2-full { display: none; margin-top: 0.7rem; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.72; }
-        .tier2-full.open { display: block; animation: fadeUp 0.3s ease; }
-        .palace-no-star { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
-
-        /* ===== AI Deep Reading (Tier 3) ===== */
-        .ai-section { margin-top: 1rem; }
-        .ai-card {
-            background: var(--bg-card-solid); border: 1px solid var(--border);
-            border-radius: var(--radius-lg); padding: 1.4rem;
+        .palace-detail-close {
+            float: right;
+            width: auto;
+            border: 0;
+            padding: 0 0 0.5rem 1rem;
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+        button:hover { background: #2e2e2e; }
+        .btn-share:hover, .btn-read-more:hover, .palace-detail-close:hover { background: transparent; }
+        button:disabled { opacity: 0.45; cursor: not-allowed; }
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+            outline: 2px solid var(--ink);
+            outline-offset: 2px;
+        }
+        .results { display: none; margin-top: 2.75rem; }
+        .results.active { display: block; }
+        .block { padding: 1.75rem 0; border-top: 1px solid var(--line); }
+        .block h2, .block-title, .info-block h4, .detail-label, .sw-col h3 {
+            margin: 0 0 0.75rem;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        .detail-label { margin-top: 1rem; }
+        .block-title { margin-top: 1.25rem; }
+        #arch-name {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+        #arch-essence { margin: 0.6rem 0 0; }
+        #arch-tag { margin: 0.7rem 0 0; color: var(--muted); }
+        .time-caveat { display: none; margin: 0.85rem 0 0; color: var(--muted); }
+        #snapshot-text { margin: 0; }
+        .chips { margin-top: 0.8rem; color: var(--muted); }
+        .chip:not(:last-child)::after { content: "  ·  "; }
+        .sw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; }
+        .sw-col ul { margin: 0; padding-left: 1.15rem; }
+        .sw-col li { margin: 0.3rem 0; }
+        .acc-item, .palace-acc-item, .ai-palace-block { border-bottom: 1px solid var(--line); }
+        .acc-item:last-child, .palace-acc-item:last-child, .ai-palace-block:last-child { border-bottom: 0; }
+        .acc-head, .palace-acc-head, .ai-palace-head, .adv-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            padding: 0.85rem 0;
+            cursor: pointer;
+        }
+        .palace-acc-left { min-width: 0; flex: 1; }
+        .palace-acc-icon { display: none; }
+        .palace-acc-name { font-weight: 500; }
+        .palace-sub { color: var(--muted); font-weight: 400; }
+        .palace-acc-oneliner {
+            margin-top: 0.15rem;
+            color: var(--muted);
+            white-space: normal;
+        }
+        .acc-chev, .palace-acc-chev, .adv-chev {
+            color: var(--muted);
+            display: inline-block;
+            flex: none;
+        }
+        .adv-title .adv-chev { margin-right: 0.45rem; }
+        .ai-palace-head .acc-chev { margin-left: auto; }
+        .acc-body, .palace-acc-body, .tier2-full, .ai-palace-body, #adv-body { display: none; }
+        .palace-acc-body.open, .tier2-full.open, .ai-palace-body.open, #adv-body.open { display: block; }
+        .acc-body { padding-bottom: 0.9rem; }
+        .acc-body p, .tier2-full p, .palace-detail-text p { margin: 0.45rem 0; }
+        .palace-acc-body { padding-bottom: 1rem; }
+        .ai-desc, .note, .ai-disclaimer, .chart-note, .adv-hint {
+            color: var(--muted);
+        }
+        .ai-desc { margin: 0 0 1rem; }
+        .ai-disclaimer { margin: 0.75rem 0 1rem; }
+        .ai-api-group { margin-bottom: 0.25rem; }
+        .ai-results { display: none; }
+        .ai-results.active { display: block; }
+        .ai-palace-body { padding-bottom: 0.9rem; }
+        .ai-palace-body p { margin: 0.4rem 0; }
+        .form-error { margin-top: 1rem; }
+        .ai-loading-bar {
+            display: none;
+            height: 1px;
+            margin-top: 1rem;
+            background: var(--line);
             overflow: hidden;
         }
-        .ai-card h3 { font-size: 0.82rem; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 0.6rem; }
-        .ai-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 1rem; }
-        .ai-api-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
-        .ai-api-group label { font-size: 0.78rem; color: var(--text-muted); }
-        .ai-api-input {
-            width: 100%; padding: 0.65rem 0.85rem; border-radius: var(--radius);
-            background: rgba(21,8,38,0.85); border: 1px solid var(--border-soft);
-            color: var(--text-primary); font-size: 0.92rem; outline: none;
-            transition: border-color 0.25s;
-        }
-        .ai-api-input:focus { border-color: var(--gold); }
-        .ai-disclaimer { font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; padding: 0.5rem; background: rgba(167,107,216,0.08); border-radius: var(--radius); }
-        .btn-ai-generate {
-            width: 100%; padding: 0.85rem; border-radius: var(--radius);
-            background: linear-gradient(135deg, var(--purple-mid), var(--purple-light));
-            color: #fff; border: 1px solid rgba(125,76,232,0.5);
-            font-size: 0.95rem; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .btn-ai-generate:hover { box-shadow: 0 6px 20px rgba(125,76,232,0.4); transform: translateY(-1px); }
-        .btn-ai-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-        .ai-results { margin-top: 1rem; display: none; }
-        .ai-results.active { display: block; }
-        .ai-palace-block { border-bottom: 1px solid var(--border-soft); }
-        .ai-palace-block:last-child { border-bottom: none; }
-        .ai-palace-head {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.8rem 0; cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text-primary);
-        }
-        .ai-palace-head:hover { color: var(--gold-light); }
-        .ai-palace-head .acc-chev { color: var(--gold); transition: transform 0.25s; font-size: 1rem; }
-        .ai-palace-body { display: none; padding: 0 0 1rem; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.72; }
-        .ai-palace-body.open { display: block; animation: fadeUp 0.3s ease; }
-        .ai-palace-body p { margin-bottom: 0.6rem; }
-        .ai-typing-cursor { display: inline-block; width: 2px; height: 1em; background: var(--gold); animation: blink 0.8s infinite; vertical-align: text-bottom; margin-left: 2px; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        .ai-loading-bar { width: 100%; height: 3px; background: var(--border-soft); border-radius: 2px; margin-top: 1rem; overflow: hidden; display: none; }
         .ai-loading-bar.active { display: block; }
-        .ai-loading-bar-inner { height: 100%; width: 30%; background: linear-gradient(90deg, var(--purple-light), var(--gold)); border-radius: 2px; animation: aiLoading 1.5s ease-in-out infinite; }
-        @keyframes aiLoading { 0%{transform:translateX(-100%)} 100%{transform:translateX(400%)} }
-
-        /* Advanced (collapsed chart) */
-        .advanced { margin-top: 1.25rem; border: 1px dashed var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-        .adv-head {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 1.3rem; cursor: pointer; background: rgba(45,27,105,0.25);
+        .ai-loading-bar-inner {
+            height: 100%;
+            width: 35%;
+            background: var(--ink);
+            animation: load 1.1s linear infinite;
         }
-        .adv-head:hover { background: rgba(45,27,105,0.4); }
-        .adv-title { font-size: 0.95rem; color: var(--text-secondary); }
-        .adv-title .adv-chev { color: var(--gold); margin-right: 0.5rem; display: inline-block; transition: transform 0.25s; }
-        .adv-hint { font-size: 0.75rem; color: var(--text-muted); }
-        .adv-body { display: none; padding: 1.3rem; }
-        .adv-body.open { display: block; }
-        #chart-svg { width: 100%; max-width: 560px; height: auto; margin: 0 auto 1.2rem; display: block; }
-        .chart-note { text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1.2rem; }
-        .info-block h4 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin: 1.2rem 0 0.7rem; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-        .info-item { display: flex; flex-direction: column; gap: 0.15rem; }
-        .info-item .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .info-item .value { font-size: 0.92rem; color: var(--text-primary); font-weight: 600; }
-        .star-list { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+        .ai-typing-cursor {
+            display: inline-block;
+            width: 1px;
+            height: 0.9em;
+            margin-left: 2px;
+            background: currentColor;
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes load { from { transform: translateX(-100%); } to { transform: translateX(320%); } }
+        @keyframes blink { 50% { opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) {
+            .ai-loading-bar-inner, .ai-typing-cursor { animation: none; }
+        }
+        .chart-note { margin: 0.75rem 0 0; }
+        #adv-body { overflow-x: auto; max-width: 100%; padding-bottom: 0.25rem; }
+        #chart-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            background: var(--paper);
+        }
+        #chart-svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+        .chart-palace-name { font-size: 12px; fill: #1c1c1c; font-weight: 600; }
+        .chart-palace-sub { font-size: 9px; fill: #5e5c57; }
+        .chart-star-major { font-size: 11px; fill: #1c1c1c; font-weight: 600; }
+        .chart-star-minor, .chart-star-tough { font-size: 9px; fill: #3a3936; }
+        .chart-stem, .chart-body-marker { font-size: 9px; fill: #5e5c57; }
+        .chart-center-text { font-size: 12px; fill: #3a3936; }
+        .chart-center-title { font-size: 14px; fill: #1c1c1c; font-weight: 600; }
+        .palace-cell { cursor: pointer; }
+        .palace-cell:hover rect { stroke: #1c1c1c; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem 1.5rem; }
+        .info-item .label { display: block; margin: 0; color: var(--muted); }
+        .info-item .value { display: block; }
+        .star-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.35rem; }
         .star-tag {
-            display: inline-flex; align-items: center; padding: 0.28rem 0.65rem; border-radius: 99px; font-size: 0.78rem; font-weight: 500;
+            display: inline-block;
+            padding: 0.05rem 0.4rem;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--ink);
+            font-size: 0.875rem;
         }
-        .star-tag.major { background: rgba(244,220,154,0.14); color: var(--gold-light); border: 1px solid rgba(244,220,154,0.3); }
-        .star-tag.minor { background: rgba(167,139,250,0.14); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.3); }
-        .star-tag.tough { background: rgba(251,146,60,0.14); color: #fdba74; border: 1px solid rgba(251,146,60,0.3); }
-
-        /* Palace detail modal */
-        .palace-detail { display: none; position: fixed; inset: 0; background: rgba(21,8,38,0.95); z-index: 300; justify-content: center; align-items: center; padding: 1.5rem; }
-        .palace-detail.active { display: flex; }
-        .palace-detail-content { background: var(--bg-card-solid); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.8rem; max-width: 460px; width: 100%; max-height: 82vh; overflow-y: auto; }
-        .palace-detail-content h3 { color: var(--gold-light); margin-bottom: 0.8rem; font-size: 1.25rem; }
-        .palace-detail-close { float: right; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; line-height: 1; }
-        .palace-detail-close:hover { color: var(--text-primary); }
-        .palace-cell { cursor: pointer; transition: opacity 0.2s; }
-        .palace-cell:hover rect { stroke: var(--gold); stroke-width: 2; }
-        .chart-palace-name { font-size: 11px; fill: #e0b450; font-weight: 600; }
-        .chart-palace-sub { font-size: 8px; fill: #9a89bd; }
-        .chart-star-major { font-size: 10px; fill: #f4dc9a; font-weight: 600; }
-        .chart-star-minor { font-size: 8px; fill: #c4b5fd; }
-        .chart-star-tough { font-size: 8px; fill: #fdba74; }
-        .chart-stem { font-size: 9px; fill: #9a89bd; }
-        .chart-body-marker { font-size: 7px; fill: #a76bd8; }
-        .chart-center-text { font-size: 10px; fill: #d6c8ee; }
-        .chart-center-title { font-size: 12px; fill: #e0b450; font-weight: 600; }
-
-        /* About / Star guide */
-        .about { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem; display: none; }
-        .about.active { display: block; }
-        .about h2 { color: var(--gold-light); font-size: 1.7rem; margin-bottom: 1rem; text-align: center; }
-        .about > p { color: var(--text-secondary); margin-bottom: 1rem; text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.9rem; margin-top: 1.8rem; }
-        .legend-item { background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 1rem; transition: border-color 0.25s; }
-        .legend-item:hover { border-color: var(--gold); }
-        .legend-name { color: var(--gold-light); font-weight: 700; font-size: 1rem; }
-        .legend-sub { color: var(--text-muted); font-size: 0.76rem; margin-top: 0.1rem; }
-        .legend-desc { color: var(--text-secondary); font-size: 0.86rem; margin-top: 0.4rem; line-height: 1.5; }
-
-        footer { text-align: center; padding: 2rem 1.5rem; color: var(--text-muted); font-size: 0.78rem; border-top: 1px solid var(--border-soft); margin-top: 2.5rem; }
-        .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: var(--bg-card-solid); border: 1px solid var(--gold); border-radius: var(--radius); padding: 0.8rem 1.3rem; color: var(--gold-light); font-size: 0.88rem; z-index: 400; display: none; }
+        .star-tag.major { font-weight: 500; }
+        .star-tag.tough { border-style: dashed; }
+        .palace-star-tag { font-weight: 500; }
+        #page-about { display: none; }
+        #page-about.active { display: block; }
+        #page-about h2 {
+            margin: 2.25rem 0 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        #page-about > p { margin: 0 0 0.5rem; }
+        .legend-item { padding: 1rem 0; border-top: 1px solid var(--line); }
+        .legend-name { font-weight: 500; }
+        .legend-sub { color: var(--muted); }
+        .legend-desc { margin-top: 0.15rem; }
+        footer {
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+        }
+        #loading {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            background: rgba(247, 246, 243, 0.92);
+        }
+        #loading.active { display: flex; }
+        .toast {
+            display: none;
+            position: fixed;
+            z-index: 400;
+            left: 50%;
+            bottom: 1.25rem;
+            transform: translateX(-50%);
+            max-width: min(36rem, calc(100% - 2rem));
+            padding: 0.7rem 0.9rem;
+            background: var(--paper);
+            color: var(--ink);
+            border: 1px solid var(--ink);
+        }
         .toast.active { display: block; }
-
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 1.9rem; }
-            .form-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .res-arch { font-size: 1.7rem; }
-            .sw-grid { grid-template-columns: 1fr; gap: 1rem; }
-            .info-grid { grid-template-columns: 1fr; }
-            .palace-acc-oneliner { max-width: 180px; }
-            .ai-card { padding: 1rem; }
+        #palace-detail {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            background: rgba(28, 28, 28, 0.35);
+        }
+        #palace-detail.active { display: flex; }
+        .palace-detail-content {
+            width: 100%;
+            max-width: 28rem;
+            max-height: 80vh;
+            overflow: auto;
+            padding: 1.15rem 1.2rem 1.4rem;
+            background: var(--bg);
+            border: 1px solid var(--line);
+        }
+        .palace-detail-content h3 { margin: 0 0 0.35rem; font-size: 1.25rem; font-weight: 500; }
+        @media (max-width: 640px) {
+            .form-grid, .sw-grid, .info-grid { grid-template-columns: 1fr; }
+            .lede { font-size: 1.05rem; }
+            #arch-name, #page-about h2 { font-size: 1.35rem; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-pattern"></div>
-    <nav>
-        <div class="logo" onclick="showPage('home')">
-            <div class="logo-icon">&#9733;</div>
-            <div>
-                <div class="logo-text">Purple Star</div>
-                <div class="logo-sub">Ziwei Dou Shu</div>
-            </div>
-        </div>
-        <ul class="nav-links">
-            <li><a onclick="showPage('home')">Find your type</a></li>
-            <li><a onclick="showPage('about')">The 14 types</a></li>
-        </ul>
-    </nav>
+    <div class="wrap">
+        <header>
+            <h1><a href="#reading" onclick="showPage('home'); return false;">Purple Star</a></h1>
+            <nav>
+                <a href="#types" onclick="showPage('about'); return false;">The 14 types</a>
+            </nav>
+        </header>
 
-    <div id="page-home">
-        <section class="hero">
-            <h1>Discover Your <span class="highlight">Purple Star Type</span></h1>
-            <p>An ancient Chinese personality system dating back over a thousand years. Based on your birth date and time, it maps the positions of celestial stars across twelve life palaces to reveal your innate destiny and character.</p>
-            <p class="sub-note">Free &middot; No sign-up &middot; Takes 20 seconds</p>
-        </section>
+        <main id="page-home">
+            <p class="lede">A Purple Star reading from your birth date, using Ziwei Dou Shu.</p>
 
-        <section class="form-section">
-            <div class="form-card">
+            <form id="reading" onsubmit="event.preventDefault(); generateChart();">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>Birth year</label>
-                        <input type="number" id="birth-year" min="1900" max="2100" placeholder="e.g. 1990">
+                    <div>
+                        <label for="birth-year">Birth year</label>
+                        <input type="number" id="birth-year" name="birth-year" min="1900" max="2100" placeholder="e.g. 1990" required>
                     </div>
-                    <div class="form-group">
-                        <label>Birth month</label>
-                        <select id="birth-month">
+                    <div>
+                        <label for="birth-month">Birth month</label>
+                        <select id="birth-month" name="birth-month" required>
                             <option value="">Month</option>
-                            <option value="1">January</option><option value="2">February</option>
-                            <option value="3">March</option><option value="4">April</option>
-                            <option value="5">May</option><option value="6">June</option>
-                            <option value="7">July</option><option value="8">August</option>
-                            <option value="9">September</option><option value="10">October</option>
-                            <option value="11">November</option><option value="12">December</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Birth day</label>
-                        <input type="number" id="birth-day" min="1" max="31" placeholder="e.g. 15">
+                    <div>
+                        <label for="birth-day">Birth day</label>
+                        <input type="number" id="birth-day" name="birth-day" min="1" max="31" placeholder="e.g. 15" required>
                     </div>
-                    <div class="form-group">
-                        <label>Birth time</label>
-                        <select id="birth-hour">
-                            <option value="">Time</option>
+                    <div>
+                        <label for="birth-hour">Birth hour</label>
+                        <select id="birth-hour" name="birth-hour" required>
+                            <option value="">Hour</option>
                             <option value="0">12 AM (midnight)</option>
-                            <option value="1">1 AM</option><option value="2">2 AM</option>
-                            <option value="3">3 AM</option><option value="4">4 AM</option>
-                            <option value="5">5 AM</option><option value="6">6 AM</option>
-                            <option value="7">7 AM</option><option value="8">8 AM</option>
-                            <option value="9">9 AM</option><option value="10">10 AM</option>
-                            <option value="11">11 AM</option><option value="12">12 PM (noon)</option>
-                            <option value="13">1 PM</option><option value="14">2 PM</option>
-                            <option value="15">3 PM</option><option value="16">4 PM</option>
-                            <option value="17">5 PM</option><option value="18">6 PM</option>
-                            <option value="19">7 PM</option><option value="20">8 PM</option>
-                            <option value="21">9 PM</option><option value="22">10 PM</option>
+                            <option value="1">1 AM</option>
+                            <option value="2">2 AM</option>
+                            <option value="3">3 AM</option>
+                            <option value="4">4 AM</option>
+                            <option value="5">5 AM</option>
+                            <option value="6">6 AM</option>
+                            <option value="7">7 AM</option>
+                            <option value="8">8 AM</option>
+                            <option value="9">9 AM</option>
+                            <option value="10">10 AM</option>
+                            <option value="11">11 AM</option>
+                            <option value="12">12 PM (noon)</option>
+                            <option value="13">1 PM</option>
+                            <option value="14">2 PM</option>
+                            <option value="15">3 PM</option>
+                            <option value="16">4 PM</option>
+                            <option value="17">5 PM</option>
+                            <option value="18">6 PM</option>
+                            <option value="19">7 PM</option>
+                            <option value="20">8 PM</option>
+                            <option value="21">9 PM</option>
+                            <option value="22">10 PM</option>
                             <option value="23">11 PM</option>
                             <option value="unknown">I don't know my birth time</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Birth Energy</label>
-                        <select id="gender">
+                    <div class="full">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" required>
                             <option value="">Select</option>
-                            <option value="male">阳 Yáng — active, expanding energy</option>
-                            <option value="female">阴 Yīn — receptive, inward energy</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
                         </select>
-                        <p class="field-note">This determines the direction of energy flow in your chart calculation, a technical parameter in Ziwei astrology.</p>
                     </div>
-                    <div class="form-group">
-                        <label>Calendar</label>
-                        <select id="calendar-type">
-                            <option value="solar">Standard (Gregorian)</option>
+                    <div class="full">
+                        <label for="calendar-type">Calendar</label>
+                        <select id="calendar-type" name="calendar-type">
+                            <option value="solar">Solar</option>
                             <option value="lunar">Chinese lunar</option>
                         </select>
                     </div>
-                    <button class="btn-generate" onclick="generateChart()">&#9733; Reveal my type</button>
-                </div>
-            </div>
-        </section>
-
-        <section class="results" id="results">
-            <!-- Archetype Hero Card -->
-            <div class="res-hero">
-                <div class="res-eyebrow">Your Purple Star type</div>
-                <div class="res-arch" id="arch-name">&mdash;</div>
-                <div class="res-essence" id="arch-essence"></div>
-                <div class="res-tag" id="arch-tag"></div>
-                <div class="time-caveat" id="time-caveat"></div>
-            </div>
-
-            <!-- Snapshot -->
-            <div class="res-card">
-                <h3>Your snapshot</h3>
-                <div class="snapshot-text" id="snapshot-text"></div>
-                <div class="chips" id="snapshot-chips"></div>
-            </div>
-
-            <!-- Strengths & Watch-outs -->
-            <div class="res-card">
-                <h3>Strengths &amp; watch-outs</h3>
-                <div class="sw-grid">
-                    <div class="sw-col good">
-                        <h4>&#9733; Strengths</h4>
-                        <ul id="strengths-list"></ul>
-                    </div>
-                    <div class="sw-col edge">
-                        <h4>&#9788; Watch-outs</h4>
-                        <ul id="watchouts-list"></ul>
+                    <div class="full">
+                        <button class="btn-generate" type="submit">Show my type</button>
                     </div>
                 </div>
-            </div>
+            </form>
 
-            <!-- Deeper Reading (4 accordion items) -->
-            <div class="res-card">
-                <h3>Go deeper</h3>
-                <div class="acc-item">
-                    <div class="acc-head" onclick="toggleAcc('acc-personality', this)">Personality in depth <span class="acc-chev">&#9662;</span></div>
-                    <div class="acc-body" id="acc-personality"></div>
+            <section class="results" id="results">
+                <div class="block">
+                    <h2>Your type</h2>
+                    <p id="arch-name">&mdash;</p>
+                    <p id="arch-essence"></p>
+                    <p id="arch-tag"></p>
+                    <p class="time-caveat" id="time-caveat"></p>
                 </div>
-                <div class="acc-item">
-                    <div class="acc-head" onclick="toggleAcc('acc-career', this)">Career &amp; calling <span class="acc-chev">&#9662;</span></div>
-                    <div class="acc-body" id="acc-career"></div>
-                </div>
-                <div class="acc-item">
-                    <div class="acc-head" onclick="toggleAcc('acc-love', this)">Love &amp; relationships <span class="acc-chev">&#9662;</span></div>
-                    <div class="acc-body" id="acc-love"></div>
-                </div>
-                <div class="acc-item">
-                    <div class="acc-head" onclick="toggleAcc('acc-money', this)">Wealth &amp; money <span class="acc-chev">&#9662;</span></div>
-                    <div class="acc-body" id="acc-money"></div>
-                </div>
-            </div>
 
-            <!-- ===== TIER 1 & TIER 2: 12 Palace Overview ===== -->
-            <div class="palace-overview res-card" id="palace-overview">
-                <h3>Your 12 Palaces at a Glance</h3>
-                <div id="palace-accordion-list"></div>
-            </div>
+                <div class="block">
+                    <h2>Snapshot</h2>
+                    <p id="snapshot-text"></p>
+                    <div class="chips" id="snapshot-chips"></div>
+                </div>
 
-            <!-- ===== TIER 3: AI Deep Reading ===== -->
-            <div class="ai-section res-card" id="ai-section">
-                <div class="ai-card">
-                    <h3>&#10024; AI Deep Reading</h3>
-                    <p class="ai-desc">Generate a personalized interpretation for all 12 palaces powered by AI. Your chart data is sent directly to OpenAI from your browser &mdash; nothing passes through our servers.</p>
+                <div class="block">
+                    <h2>Strengths and watch-outs</h2>
+                    <div class="sw-grid">
+                        <div class="sw-col">
+                            <h3>Strengths</h3>
+                            <ul id="strengths-list"></ul>
+                        </div>
+                        <div class="sw-col">
+                            <h3>Watch-outs</h3>
+                            <ul id="watchouts-list"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <h2>In more detail</h2>
+                    <div class="acc-item">
+                        <div class="acc-head" onclick="toggleAcc('acc-personality', this)">Personality <span class="acc-chev">&#9662;</span></div>
+                        <div class="acc-body" id="acc-personality"></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-head" onclick="toggleAcc('acc-career', this)">Career <span class="acc-chev">&#9662;</span></div>
+                        <div class="acc-body" id="acc-career"></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-head" onclick="toggleAcc('acc-love', this)">Love <span class="acc-chev">&#9662;</span></div>
+                        <div class="acc-body" id="acc-love"></div>
+                    </div>
+                    <div class="acc-item">
+                        <div class="acc-head" onclick="toggleAcc('acc-money', this)">Money <span class="acc-chev">&#9662;</span></div>
+                        <div class="acc-body" id="acc-money"></div>
+                    </div>
+                </div>
+
+                <div class="block" id="palace-overview">
+                    <h2>Twelve palaces</h2>
+                    <div id="palace-accordion-list"></div>
+                </div>
+
+                <div class="block" id="ai-section">
+                    <h2>Optional longer reading</h2>
+                    <p class="ai-desc">A palace-by-palace note, written with your own OpenAI key. The chart is sent from this browser straight to OpenAI.</p>
                     <div class="ai-api-group">
-                        <label>OpenAI API Key</label>
+                        <label for="ai-api-key">OpenAI API key</label>
                         <input type="password" class="ai-api-input" id="ai-api-key" placeholder="sk-..." autocomplete="off">
                     </div>
-                    <div class="ai-disclaimer">
-                        &#128274; Your API key is stored only in your browser session and sent directly to OpenAI. It is never transmitted to any other server. You can clear it by refreshing the page.
-                    </div>
-                    <button class="btn-ai-generate" id="btn-ai-generate" onclick="generateAIReading()">
-                        &#10024; Generate AI reading for all 12 palaces
-                    </button>
+                    <p class="ai-disclaimer">The key stays in this browser session and is sent only to OpenAI. Refresh the page to clear it.</p>
+                    <button class="btn-ai-generate" id="btn-ai-generate" type="button" onclick="generateAIReading()">Generate AI reading</button>
                     <div class="ai-loading-bar" id="ai-loading-bar"><div class="ai-loading-bar-inner"></div></div>
                     <div class="ai-results" id="ai-results"></div>
                 </div>
-            </div>
 
-            <!-- Share -->
-            <div class="share-row">
-                <button class="btn-share" onclick="shareType()">&#10024; Share my type</button>
-            </div>
-
-            <!-- Advanced Chart -->
-            <div class="advanced">
-                <div class="adv-head" onclick="toggleAdvanced(this)">
-                    <span class="adv-title"><span class="adv-chev">&#9656;</span>See the star chart behind your reading</span>
-                    <span class="adv-hint">advanced</span>
+                <div class="block">
+                    <button class="btn-share" type="button" onclick="shareType()">Share my type</button>
                 </div>
-                <div class="adv-body" id="adv-body">
-                    <svg id="chart-svg" viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg"></svg>
-                    <p class="chart-note">This is your full 12-palace Ziwei chart. Tap any palace for details.</p>
-                    <div class="info-block">
-                        <h4>Chart basics</h4>
-                        <div class="info-grid" id="basic-info"></div>
-                        <h4>Major stars in your Life Palace</h4>
-                        <div class="star-list" id="life-palace-stars"></div>
-                        <h4>All 14 major stars</h4>
-                        <div class="star-list" id="all-major-stars"></div>
+
+                <div class="block">
+                    <div class="adv-head" onclick="toggleAdvanced(this)">
+                        <span class="adv-title"><span class="adv-chev">&#9656;</span>Star chart</span>
+                        <span class="adv-hint">12 palaces</span>
+                    </div>
+                    <div class="adv-body" id="adv-body">
+                        <svg id="chart-svg" viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Twelve-palace chart"></svg>
+                        <p class="chart-note">Tap a palace for its stars.</p>
+                        <div class="info-block">
+                            <h4>Chart basics</h4>
+                            <div class="info-grid" id="basic-info"></div>
+                            <h4>Major stars in your Life Palace</h4>
+                            <div class="star-list" id="life-palace-stars"></div>
+                            <h4>All 14 major stars</h4>
+                            <div class="star-list" id="all-major-stars"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+        </main>
+
+        <section id="page-about">
+            <h2>The 14 types</h2>
+            <p>Ziwei Dou Shu turns on 14 major stars. The one in your Life Palace is your type.</p>
+            <div id="legend"></div>
         </section>
+
+        <footer>
+            <p>Purple Star. For self-reflection and entertainment. Not a substitute for professional advice.</p>
+        </footer>
     </div>
 
-    <div class="about" id="page-about">
-        <h2>The 14 Purple Star Types</h2>
-        <p>Ziwei Dou Shu centers on 14 major stars. The one sitting in your Life Palace becomes your core type &mdash; your personality, your talents, and your blind spots.</p>
-        <div class="legend" id="legend"></div>
+    <div id="loading" role="status" aria-live="polite">
+        <p id="loading-text">Reading your stars&hellip;</p>
     </div>
-
-    <div class="loading-overlay" id="loading">
-        <div class="loading-spinner"></div>
-        <div class="loading-text" id="loading-text">Reading your stars&hellip;</div>
-    </div>
-    <div class="toast" id="toast"></div>
-    <div class="palace-detail" id="palace-detail">
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div id="palace-detail">
         <div class="palace-detail-content" id="palace-detail-content"></div>
     </div>
 
-    <footer>
-        <p>Purple Star &copy; 2025 &middot; For self-reflection and entertainment. Not a substitute for professional advice.</p>
-    </footer>
-
-<script>
+    <script>
 // ====================================================================
 //  14 ARCHETYPE READINGS
 // ====================================================================
@@ -1113,6 +1060,16 @@ function translateFiveElements(fe) {
 }
 function hourToIndex(H) { return (H === 23) ? 0 : Math.floor((H + 1) / 2); }
 
+function isRealDate(year, month, day, calType) {
+    const y = Number(year), m = Number(month), d = Number(day);
+    if (!Number.isInteger(y) || y < 1900 || y > 2100) return false;
+    if (!Number.isInteger(m) || m < 1 || m > 12) return false;
+    if (!Number.isInteger(d) || d < 1) return false;
+    if (calType === 'lunar') return d <= 30;
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+}
+
 // ====================================================================
 //  Generate
 // ====================================================================
@@ -1125,7 +1082,10 @@ function generateChart() {
     const calType = document.getElementById('calendar-type').value;
 
     if (!year || !month || !day || hourRaw === '' || !gender) {
-        showToast('Please fill in every field to reveal your type.'); return;
+        showToast('Please fill in every field.'); return;
+    }
+    if (!isRealDate(year, month, day, calType)) {
+        showToast('Please enter a real birth date.'); return;
     }
 
     let hourIndex; lastHourUnknown = false;
@@ -1135,6 +1095,9 @@ function generateChart() {
     showLoading('Reading your stars\u2026');
     setTimeout(() => {
         try {
+            if (typeof iztro === 'undefined' || !iztro.astro) {
+                throw new Error('The chart library did not load. Check your connection and try again.');
+            }
             const dateStr = `${year}-${month}-${day}`;
             const genderStr = gender === 'male' ? '\u7537' : '\u5973';
             let astrolabe;
@@ -1301,7 +1264,7 @@ function renderPalaceOverview(data) {
         html += `<div class="palace-acc-left">`;
         html += `<div class="palace-acc-icon">${icon}</div>`;
         html += `<div class="palace-acc-label">`;
-        html += `<div class="palace-acc-name">${palaceInfo.en} <span style="color:var(--text-muted);font-size:0.78rem;font-weight:400;">${palaceInfo.subtitle}</span></div>`;
+        html += `<div class="palace-acc-name">${palaceInfo.en} <span class="palace-sub">· ${palaceInfo.subtitle}</span></div>`;
         html += `<div class="palace-acc-oneliner">${oneliner}</div>`;
         html += `</div></div>`;
         html += `<div class="palace-acc-right"><span class="palace-acc-chev">&#9662;</span></div>`;
@@ -1413,7 +1376,7 @@ async function generateAIReading() {
 
     const btn = document.getElementById('btn-ai-generate');
     btn.disabled = true;
-    btn.innerHTML = '&#8987; Generating AI reading...';
+    btn.innerHTML = 'Generating…';
     document.getElementById('ai-loading-bar').classList.add('active');
 
     const chartData = buildChartDataText(currentAstrolabe);
@@ -1473,14 +1436,14 @@ Be specific, warm, and insightful. Avoid generic astrology fluff. Reference the 
         let palaceHtml = palaces.map(p =>
             `<div class="ai-palace-block">
                 <div class="ai-palace-head" onclick="toggleAIPalace(this)">
-                    ${p.name} <span style="font-weight:400;font-size:0.82rem;color:var(--text-muted);">${p.subtitle}</span>
+                    <span>${p.name} <span class="palace-sub">· ${p.subtitle}</span></span>
                     <span class="acc-chev">&#9662;</span>
                 </div>
                 <div class="ai-palace-body" id="${p.id}"></div>
             </div>`
         ).join('');
 
-        resultsContainer.innerHTML = `<h4 style="color:var(--gold);font-size:0.82rem;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:0.8rem;">AI Palace-by-Palace Reading</h4>` + palaceHtml;
+        resultsContainer.innerHTML = `<h3 class="block-title">Palace by palace</h3>` + palaceHtml;
 
         let currentPalaceIdx = 0;
         let currentText = '';
@@ -1577,10 +1540,10 @@ Be specific, warm, and insightful. Avoid generic astrology fluff. Reference the 
     } catch (e) {
         showToast('AI reading failed: ' + e.message);
         console.error(e);
-        resultsContainer.innerHTML += `<p style="color:#f87171;margin-top:1rem;font-size:0.88rem;">Error: ${e.message}</p>`;
+        resultsContainer.innerHTML += `<p class="form-error">Error: ${e.message}</p>`;
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '&#10024; Generate AI reading for all 12 palaces';
+        btn.innerHTML = 'Generate AI reading';
         document.getElementById('ai-loading-bar').classList.remove('active');
     }
 }
@@ -1712,18 +1675,18 @@ function renderChartSVG(data) {
     if (lifeIdx >= 0) {
         const sf = [lifeIdx, (lifeIdx+4)%12, (lifeIdx+8)%12].map(center);
         const sz = center((lifeIdx+6)%12);
-        s += `<line x1="${sf[0].x}" y1="${sf[0].y}" x2="${sf[1].x}" y2="${sf[1].y}" stroke="rgba(224,180,80,0.32)" stroke-width="1.5" stroke-dasharray="6,4"/>`;
-        s += `<line x1="${sf[1].x}" y1="${sf[1].y}" x2="${sf[2].x}" y2="${sf[2].y}" stroke="rgba(224,180,80,0.32)" stroke-width="1.5" stroke-dasharray="6,4"/>`;
-        s += `<line x1="${sf[2].x}" y1="${sf[2].y}" x2="${sf[0].x}" y2="${sf[0].y}" stroke="rgba(224,180,80,0.32)" stroke-width="1.5" stroke-dasharray="6,4"/>`;
-        s += `<line x1="${sf[0].x}" y1="${sf[0].y}" x2="${sz.x}" y2="${sz.y}" stroke="rgba(167,107,216,0.4)" stroke-width="1.5" stroke-dasharray="4,3"/>`;
-        [sf[0],sf[1],sf[2],sz].forEach((pt,i) => { const c = i<3?'rgba(224,180,80,0.6)':'rgba(167,107,216,0.6)'; const r=4; s += `<polygon points="${pt.x},${pt.y-r} ${pt.x+r},${pt.y} ${pt.x},${pt.y+r} ${pt.x-r},${pt.y}" fill="${c}" opacity="0.7"/>`; });
+        s += `<line x1="${sf[0].x}" y1="${sf[0].y}" x2="${sf[1].x}" y2="${sf[1].y}" stroke="#c4c0b8" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+        s += `<line x1="${sf[1].x}" y1="${sf[1].y}" x2="${sf[2].x}" y2="${sf[2].y}" stroke="#c4c0b8" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+        s += `<line x1="${sf[2].x}" y1="${sf[2].y}" x2="${sf[0].x}" y2="${sf[0].y}" stroke="#c4c0b8" stroke-width="1.5" stroke-dasharray="6,4"/>`;
+        s += `<line x1="${sf[0].x}" y1="${sf[0].y}" x2="${sz.x}" y2="${sz.y}" stroke="#a8a49c" stroke-width="1.5" stroke-dasharray="4,3"/>`;
+        [sf[0],sf[1],sf[2],sz].forEach((pt,i) => { const c = '#6f6c66'; const r=4; s += `<polygon points="${pt.x},${pt.y-r} ${pt.x+r},${pt.y} ${pt.x},${pt.y+r} ${pt.x-r},${pt.y}" fill="${c}" opacity="0.7"/>`; });
     }
     BRANCH_ORDER.forEach((branch, idx) => {
         const palace = palaceByBranch[branch]; if (!palace) return;
         const pos = gridPos[branch]; const x = pos.c*cellW, y = pos.r*cellH;
         const info = PALACE_MAP[palace.name] || { en: palace.name, subtitle: '' };
         s += `<g class="palace-cell" onclick="showPalaceDetail(${idx})">`;
-        s += `<rect x="${x}" y="${y}" width="${cellW}" height="${cellH}" fill="rgba(21,8,38,0.4)" stroke="rgba(224,180,80,0.22)" stroke-width="1" rx="4"/>`;
+        s += `<rect x="${x}" y="${y}" width="${cellW}" height="${cellH}" fill="#fbfaf7" stroke="#d9d6cf" stroke-width="1" rx="0"/>`;
         s += `<text x="${x+cellW/2}" y="${y+16}" text-anchor="middle" class="chart-palace-name">${info.en}</text>`;
         s += `<text x="${x+cellW/2}" y="${y+28}" text-anchor="middle" class="chart-palace-sub">${info.subtitle}</text>`;
         const stemEn = STEM_EN[palace.heavenlyStem] || palace.heavenlyStem;
@@ -1736,7 +1699,7 @@ function renderChartSVG(data) {
         s += `</g>`;
     });
     const cx = cellW, cy = cellH, cw = cellW*2, ch = cellH*2;
-    s += `<rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" fill="rgba(21,8,38,0.6)" stroke="rgba(224,180,80,0.4)" stroke-width="1.5" rx="4"/>`;
+    s += `<rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" fill="#f4f3ef" stroke="#c8c4bb" stroke-width="1" rx="0"/>`;
     let zodiacEn = data.zodiac; for (const [cn, en] of Object.entries(ZODIAC_EN)) { if (data.zodiac.includes(cn)) { zodiacEn = en; break; } }
     let signEn = data.sign; for (const [cn, en] of Object.entries(SIGN_EN)) { if (data.sign.includes(cn)) { signEn = en; break; } }
     const fe = translateFiveElements(data.fiveElementsClass);
@@ -1758,14 +1721,14 @@ function showPalaceDetail(idx) {
     let html = `<button class="palace-detail-close" onclick="closePalaceDetail()">&times;</button>`;
     html += `<h3>${info.en} Palace</h3>`;
     html += `<p style="color:var(--text-muted);margin-bottom:1rem;">${info.subtitle} \u00b7 ${stemEn} ${branchEn}</p>`;
-    if (palace.isBodyPalace) html += `<p style="color:var(--purple-glow);margin-bottom:1rem;font-size:0.9rem;">&#9733; Body Palace</p>`;
+    if (palace.isBodyPalace) html += `<p class="note">Body palace</p>`;
     if (palace.majorStars.length > 0) {
-        html += `<h4 style="color:var(--gold-light);margin:0.8rem 0 0.5rem;">Major stars</h4><div class="star-list" style="margin-bottom:0.6rem;">`;
+        html += `<h4 class="detail-label">Major stars</h4><div class="star-list">`;
         palace.majorStars.forEach(s2 => { const i2 = translateStar(s2.name); const b = translateBrightness(s2.brightness); html += `<span class="star-tag major">${i2.en} \u00b7 ${i2.title}${b?' ['+b+']':''}</span>`; });
         html += `</div>`;
     }
     if (palace.minorStars.length > 0) {
-        html += `<h4 style="color:#c4b5fd;margin:0.9rem 0 0.5rem;">Minor stars</h4><div class="star-list">`;
+        html += `<h4 class="detail-label">Minor stars</h4><div class="star-list">`;
         palace.minorStars.forEach(s2 => { const i2 = translateStar(s2.name); const cls = (s2.type==='tough')?'tough':'minor'; html += `<span class="star-tag ${cls}">${i2.en}</span>`; });
         html += `</div>`;
     }
@@ -1809,6 +1772,7 @@ function renderLegend() {
         return `<div class="legend-item"><div class="legend-name">${r.name}</div><div class="legend-sub">${cn} \u00b7 ${r.pinyin}</div><div class="legend-desc">${r.essence}</div></div>`;
     }).join('');
 }
-</script>
+
+    </script>
 </body>
 </html>
